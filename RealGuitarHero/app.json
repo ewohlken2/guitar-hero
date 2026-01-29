@@ -1,33 +1,36 @@
 {
   "expo": {
-    "name": "RealGuitarHero",
-    "slug": "RealGuitarHero",
+    "name": "Real Guitar Hero",
+    "slug": "real-guitar-hero",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1a1a2e"
     },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.realguitarhero.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Real Guitar Hero needs microphone access to detect the chords you play on your guitar."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1a1a2e"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.realguitarhero.app",
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router"
-    ]
+    "scheme": "realguitarhero",
+    "plugins": ["expo-router"]
   }
 }
