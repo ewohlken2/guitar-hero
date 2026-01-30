@@ -12,6 +12,8 @@
 
 ## Task 1: Add polyphonic detection data types and chord-matching utilities
 
+Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/utils/chordMatching.test.ts`.
+
 **Files:**
 - Modify: `RealGuitarHero/src/types/index.ts`
 - Create: `RealGuitarHero/src/utils/chordMatching.ts`
@@ -144,6 +146,8 @@ git commit -m "feat: add chord matching utilities"
 
 ## Task 2: Expand chord database to 100+ chords
 
+Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/constants/chords.test.ts`.
+
 **Files:**
 - Modify: `RealGuitarHero/src/constants/chords.ts`
 - Test: `RealGuitarHero/__tests__/constants/chords.test.ts`
@@ -219,6 +223,8 @@ git commit -m "feat: expand chord database to 100+ entries"
 ---
 
 ## Task 3: Add polyphonic detection native modules (iOS)
+
+Status (2026-01-30): Implemented (JS bridge + iOS files). Tests PASS: `pnpm test -- __tests__/modules/audioDetection.test.ts`.
 
 **Files:**
 - Create: `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.swift`
@@ -442,6 +448,8 @@ git commit -m "feat: add iOS audio detection module scaffold"
 
 ## Task 4: Add polyphonic detection native modules (Android)
 
+Status (2026-01-30): Implemented. Android app prebuild completed; JTransforms dependency added to module build.
+
 **Files:**
 - Create: `RealGuitarHero/modules/audio-detection/android/AudioDetectionModule.kt`
 - Modify: `RealGuitarHero/android/build.gradle` (after running `expo prebuild`)
@@ -571,6 +579,8 @@ git commit -m "feat: add Android audio detection module scaffold"
 
 ## Task 5: Wire native detection into audio store + Freeplay UI
 
+Status (2026-01-30): Implemented (keeps FallingNote, adds native hook + env-based switch). Tests PASS: `pnpm test -- __tests__/stores/useAudioStore.test.ts`, `pnpm test -- __tests__/hooks/useAudioDetection.test.ts`.
+
 **Files:**
 - Modify: `RealGuitarHero/src/stores/useAudioStore.ts`
 - Modify: `RealGuitarHero/src/hooks/useMockAudioDetection.ts` (gate for dev)
@@ -692,6 +702,8 @@ git commit -m "feat: wire native audio detection into freeplay"
 
 ## Task 6: Add song progression system and 10+ songs
 
+Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/constants/songs.test.ts`.
+
 **Files:**
 - Create: `RealGuitarHero/src/constants/songs.ts`
 - Modify: `RealGuitarHero/src/stores/useGameStore.ts`
@@ -792,6 +804,8 @@ git commit -m "feat: add song progression data"
 ---
 
 ## Task 7: Implement enhanced Game Mode (scoring, combo, visual feedback)
+
+Status (2026-01-30): Implemented (keeps FallingNote via NoteLane + HitFeedback). Tests PASS: `pnpm test -- __tests__/components/NoteLane.test.tsx`, `pnpm test -- __tests__/components/HitFeedback.test.tsx`, `pnpm test -- __tests__/stores/useGameStore.test.ts`.
 
 **Files:**
 - Modify: `RealGuitarHero/app/(tabs)/game.tsx`
@@ -941,6 +955,8 @@ git commit -m "feat: implement enhanced game mode UI"
 
 ## Task 8: Add combo/score UI polish + visual feedback
 
+Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/components/ComboDisplay.test.tsx`, `pnpm test -- __tests__/components/ScoreDisplay.test.tsx`.
+
 **Files:**
 - Modify: `RealGuitarHero/app/(tabs)/game.tsx`
 - Create: `RealGuitarHero/src/components/ComboDisplay.tsx`
@@ -1001,6 +1017,8 @@ git commit -m "feat: add combo and score UI"
 ---
 
 ## Task 9: Manual device verification for polyphonic detection
+
+Status (2026-01-30): Checklist doc created; manual device verification not yet performed.
 
 **Files:**
 - Modify: `RealGuitarHero/docs/verification/phase2-audio.md`

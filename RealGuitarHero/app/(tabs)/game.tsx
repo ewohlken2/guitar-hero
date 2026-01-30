@@ -1,7 +1,10 @@
 import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import FallingNote from '../../src/components/FallingNote';
+import NoteLane from '../../src/components/NoteLane';
+import { HitFeedback } from '../../src/components/HitFeedback';
+import { ComboDisplay } from '../../src/components/ComboDisplay';
+import { ScoreDisplay } from '../../src/components/ScoreDisplay';
 import { sampleSongs } from '../../src/constants/songs';
 import { colors, spacing, fontSize } from '../../src/constants/theme';
 import { useGameStore } from '../../src/stores/useGameStore';
@@ -127,8 +130,8 @@ export default function GameScreen() {
       </View>
 
       <View style={styles.scoreRow}>
-        <Text style={styles.score}>Score {score}</Text>
-        <Text style={styles.combo}>Combo {combo}</Text>
+        <ScoreDisplay score={score} />
+        <ComboDisplay combo={combo} />
         <Text style={styles.stats}>H {hits} / M {misses}</Text>
       </View>
 
@@ -137,20 +140,15 @@ export default function GameScreen() {
           <Text style={styles.hitZoneText}>HIT ZONE</Text>
         </View>
 
-        {lastHit && (
-          <View style={styles.hitToast}>
-            <Text style={styles.hitToastText}>{lastHit.toUpperCase()}</Text>
-          </View>
-        )}
+        {lastHit && <HitFeedback type={lastHit} />}
 
-        {notes.map((note) => {
-          const timeUntil = note.time - currentTime;
-          const progress = 1 - timeUntil / TRAVEL_TIME;
-          const y = Math.max(-100, Math.min(hitZoneY, progress * hitZoneY));
-          const status = noteStatus[note.id] ?? 'upcoming';
-
-          return <FallingNote key={note.id} label={note.chord} y={y} status={status} />;
-        })}
+        <NoteLane
+          notes={notes}
+          currentTime={currentTime}
+          hitZoneY={hitZoneY}
+          travelTime={TRAVEL_TIME}
+          noteStatus={noteStatus}
+        />
       </View>
 
       <View style={styles.controls}>
@@ -187,14 +185,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: spacing.sm,
   },
-  score: {
-    color: colors.text,
-    fontWeight: '700',
-  },
-  combo: {
-    color: colors.good,
-    fontWeight: '700',
-  },
   stats: {
     color: colors.textSecondary,
   },
@@ -220,18 +210,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: fontSize.xs,
     letterSpacing: 2,
-  },
-  hitToast: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: '60%',
-    alignItems: 'center',
-  },
-  hitToastText: {
-    color: colors.text,
-    fontSize: fontSize.lg,
-    fontWeight: '800',
   },
   controls: {
     paddingBottom: spacing.lg,

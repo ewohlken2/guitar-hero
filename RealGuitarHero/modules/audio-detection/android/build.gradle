@@ -51,9 +51,8 @@ dependencies {
     // AndroidX core for permissions and compat utilities
     implementation "androidx.core:core-ktx:1.12.0"
 
-    // JTransforms for advanced FFT processing (optional - we implement basic FFT inline)
-    // Using inline implementation to reduce dependencies, but JTransforms can be added:
-    // implementation "com.github.wendykierp:JTransforms:3.1"
+    // JTransforms for advanced FFT processing
+    implementation "com.github.wendykierp:JTransforms:3.1"
 }
 
 // Helper function to safely get extension properties

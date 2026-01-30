@@ -1,10 +1,16 @@
 import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMockAudioDetection } from '../../src/hooks/useMockAudioDetection';
+import { useAudioDetection } from '../../src/hooks/useAudioDetection';
 import { colors, spacing, fontSize } from '../../src/constants/theme';
 
+const useDetectionHook =
+  process.env.EXPO_PUBLIC_USE_MOCK_AUDIO === 'true'
+    ? useMockAudioDetection
+    : useAudioDetection;
+
 export default function FreeplayScreen() {
-  const { isListening, currentChord, chordHistory, start, stop } = useMockAudioDetection();
+  const { isListening, currentChord, chordHistory, start, stop } = useDetectionHook();
 
   return (
     <SafeAreaView style={styles.container}>
