@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'expo-module-gradle-plugin'
+}
+
+group = 'com.realguitarhero'
+version = '1.0.0'
+
+android {
+    namespace "com.realguitarhero.audiodetection"
+
+    compileSdkVersion safeExtGet('compileSdkVersion', 34)
+
+    defaultConfig {
+        minSdkVersion safeExtGet('minSdkVersion', 24)
+        targetSdkVersion safeExtGet('targetSdkVersion', 34)
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += ['src/main/java', '.']
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+
+    // Expo modules core for native module bridge
+    implementation project(':expo-modules-core')
+
+    // AndroidX core for permissions and compat utilities
+    implementation "androidx.core:core-ktx:1.12.0"
+
+    // JTransforms for advanced FFT processing (optional - we implement basic FFT inline)
+    // Using inline implementation to reduce dependencies, but JTransforms can be added:
+    // implementation "com.github.wendykierp:JTransforms:3.1"
+}
+
+// Helper function to safely get extension properties
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}

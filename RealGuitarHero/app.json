@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.realguitarhero.app",
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "Real Guitar Hero needs microphone access to detect the chords you play on your guitar."
+        "NSMicrophoneUsageDescription": "Real Guitar Hero needs microphone access to detect the chords you play on your guitar.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -43,6 +44,7 @@
       "eas": {
         "projectId": "72083400-1323-46c8-a19e-46e7c787c476"
       }
-    }
+    },
+    "owner": "ewohlken"
   }
 }

@@ -17,6 +17,19 @@ export interface Chord {
   alternateVoicings?: ChordDiagram[];
 }
 
+// Pitch detection types
+export interface DetectedPitch {
+  note: string; // Note name (e.g., 'C', 'F#', 'Bb')
+  frequency: number; // Detected frequency in Hz
+  confidence: number; // Confidence score 0-1
+}
+
+export interface DetectedChordMatch {
+  chord: Chord;
+  score: number; // Overlap score 0-1
+  timestamp: number; // When the match was detected
+}
+
 // Audio detection types
 export interface DetectedChord {
   name: string;

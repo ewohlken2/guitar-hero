@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android"],
+  "ios": {
+    "modules": ["AudioDetectionModule"]
+  },
+  "android": {
+    "modules": ["com.realguitarhero.audiodetection.AudioDetectionModule"]
+  }
+}
