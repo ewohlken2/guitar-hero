@@ -5,14 +5,18 @@ import FallingNote from '../../src/components/FallingNote';
 import { sampleSongs } from '../../src/constants/songs';
 import { colors, spacing, fontSize } from '../../src/constants/theme';
 import { useGameStore } from '../../src/stores/useGameStore';
+import { useMockAudioDetection } from '../../src/hooks/useMockAudioDetection';
 
 const TRAVEL_TIME = 3.5; // seconds from spawn to hit zone
 const HIT_WINDOW = 0.25; // seconds around target time
+const PERFECT_WINDOW = 0.1;
 
 export default function GameScreen() {
-  const { setSong, setLevel, startGame, endGame, isPlaying, score, combo, hits, misses } = useGameStore();
+  const { setSong, setLevel, startGame, endGame, addHit, addMiss, isPlaying, score, combo, hits, misses } = useGameStore();
+  const { currentChord, start, stop } = useMockAudioDetection();
   const [currentTime, setCurrentTime] = useState(0);
   const [noteStatus, setNoteStatus] = useState<Record<string, 'upcoming' | 'hit' | 'miss'>>({});
+  const [lastHit, setLastHit] = useState<'perfect' | 'good' | 'miss' | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
 
@@ -55,9 +59,59 @@ export default function GameScreen() {
     };
   }, [isPlaying]);
 
+  useEffect(() => {
+    if (isPlaying) {
+      start();
+    } else {
+      stop();
+    }
+  }, [isPlaying, start, stop]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    setNoteStatus((prev) => {
+      let changed = false;
+      const next = { ...prev };
+
+      notes.forEach((note) => {
+        const status = prev[note.id] ?? 'upcoming';
+        if (status !== 'upcoming') return;
+
+        const timeUntil = note.time - currentTime;
+        const inWindow = Math.abs(timeUntil) <= HIT_WINDOW;
+
+        if (inWindow && currentChord?.name === note.chord) {
+          const isPerfect = Math.abs(timeUntil) <= PERFECT_WINDOW;
+          next[note.id] = 'hit';
+          changed = true;
+          addHit(isPerfect ? 'perfect' : 'good');
+          setLastHit(isPerfect ? 'perfect' : 'good');
+          return;
+        }
+
+        if (timeUntil < -HIT_WINDOW) {
+          next[note.id] = 'miss';
+          changed = true;
+          addMiss();
+          setLastHit('miss');
+        }
+      });
+
+      return changed ? next : prev;
+    });
+  }, [addHit, addMiss, currentChord?.name, currentTime, isPlaying, notes]);
+
+  useEffect(() => {
+    if (!lastHit) return;
+    const timer = setTimeout(() => setLastHit(null), 700);
+    return () => clearTimeout(timer);
+  }, [lastHit]);
+
   const handleStart = () => {
     setNoteStatus({});
     setCurrentTime(0);
+    setLastHit(null);
     startGame();
   };
 
@@ -83,15 +137,17 @@ export default function GameScreen() {
           <Text style={styles.hitZoneText}>HIT ZONE</Text>
         </View>
 
+        {lastHit && (
+          <View style={styles.hitToast}>
+            <Text style={styles.hitToastText}>{lastHit.toUpperCase()}</Text>
+          </View>
+        )}
+
         {notes.map((note) => {
           const timeUntil = note.time - currentTime;
           const progress = 1 - timeUntil / TRAVEL_TIME;
           const y = Math.max(-100, Math.min(hitZoneY, progress * hitZoneY));
           const status = noteStatus[note.id] ?? 'upcoming';
-
-          if (timeUntil < -HIT_WINDOW && status === 'upcoming') {
-            setNoteStatus((prev) => ({ ...prev, [note.id]: 'miss' }));
-          }
 
           return <FallingNote key={note.id} label={note.chord} y={y} status={status} />;
         })}
@@ -164,6 +220,18 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: fontSize.xs,
     letterSpacing: 2,
+  },
+  hitToast: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: '60%',
+    alignItems: 'center',
+  },
+  hitToastText: {
+    color: colors.text,
+    fontSize: fontSize.lg,
+    fontWeight: '800',
   },
   controls: {
     paddingBottom: spacing.lg,
