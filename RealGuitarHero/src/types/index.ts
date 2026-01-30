@@ -89,3 +89,43 @@ export interface HitResult {
   noteId: string;
   timestamp: number;
 }
+
+// Editor types for custom song creation
+export interface UserSong extends Song {
+  isUserCreated: true; // Literal type to distinguish user-created songs
+  createdAt: number; // Timestamp when song was created
+  updatedAt: number; // Timestamp when song was last modified
+}
+
+export interface TimelinePosition {
+  time: number; // Time in seconds
+  beat: number; // Beat number (can be fractional)
+  measure: number; // Measure number
+}
+
+export interface EditorAction {
+  type: 'add' | 'delete' | 'move' | 'resize' | 'update';
+  noteId?: string;
+  previousState: Partial<ChordNote>;
+  newState: Partial<ChordNote>;
+  timestamp: number;
+}
+
+export interface EditorState {
+  song: UserSong | null;
+  selectedNoteId: string | null;
+  isPlaying: boolean;
+  currentTime: number;
+  zoom: number; // Range: 0.5 to 4
+  snapToGrid: boolean;
+  gridSubdivision: number; // Values: 1, 2, 4, 8
+  undoStack: EditorAction[];
+  redoStack: EditorAction[];
+  isDirty: boolean;
+}
+
+export interface GhostNote {
+  chord: string;
+  time: number;
+  duration: number;
+}
