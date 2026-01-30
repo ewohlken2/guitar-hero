@@ -1,12 +1,106 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import FallingNote from '../../src/components/FallingNote';
+import { sampleSongs } from '../../src/constants/songs';
+import { colors, spacing, fontSize } from '../../src/constants/theme';
+import { useGameStore } from '../../src/stores/useGameStore';
+
+const TRAVEL_TIME = 3.5; // seconds from spawn to hit zone
+const HIT_WINDOW = 0.25; // seconds around target time
 
 export default function GameScreen() {
+  const { setSong, setLevel, startGame, endGame, isPlaying, score, combo, hits, misses } = useGameStore();
+  const [currentTime, setCurrentTime] = useState(0);
+  const [noteStatus, setNoteStatus] = useState<Record<string, 'upcoming' | 'hit' | 'miss'>>({});
+  const startTimeRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  const song = sampleSongs[0];
+  const level = song.levels[0];
+  const screenHeight = Dimensions.get('window').height;
+  const hitZoneY = screenHeight * 0.75;
+
+  useEffect(() => {
+    setSong(song);
+    setLevel(level.levelNumber);
+  }, [setSong, setLevel, song, level.levelNumber]);
+
+  const notes = useMemo(() => level.chart, [level.chart]);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      return;
+    }
+
+    startTimeRef.current = Date.now();
+
+    const loop = () => {
+      const elapsed = (Date.now() - (startTimeRef.current ?? Date.now())) / 1000;
+      setCurrentTime(elapsed);
+      rafRef.current = requestAnimationFrame(loop);
+    };
+
+    rafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [isPlaying]);
+
+  const handleStart = () => {
+    setNoteStatus({});
+    setCurrentTime(0);
+    startGame();
+  };
+
+  const handleStop = () => {
+    endGame();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View style={styles.header}>
         <Text style={styles.title}>Game Mode</Text>
-        <Text style={styles.subtitle}>Coming soon...</Text>
+        <Text style={styles.subtitle}>{song.title} · Level {level.levelNumber}</Text>
+      </View>
+
+      <View style={styles.scoreRow}>
+        <Text style={styles.score}>Score {score}</Text>
+        <Text style={styles.combo}>Combo {combo}</Text>
+        <Text style={styles.stats}>H {hits} / M {misses}</Text>
+      </View>
+
+      <View style={styles.playfield}>
+        <View style={[styles.hitZone, { top: hitZoneY }]}>
+          <Text style={styles.hitZoneText}>HIT ZONE</Text>
+        </View>
+
+        {notes.map((note) => {
+          const timeUntil = note.time - currentTime;
+          const progress = 1 - timeUntil / TRAVEL_TIME;
+          const y = Math.max(-100, Math.min(hitZoneY, progress * hitZoneY));
+          const status = noteStatus[note.id] ?? 'upcoming';
+
+          if (timeUntil < -HIT_WINDOW && status === 'upcoming') {
+            setNoteStatus((prev) => ({ ...prev, [note.id]: 'miss' }));
+          }
+
+          return <FallingNote key={note.id} label={note.chord} y={y} status={status} />;
+        })}
+      </View>
+
+      <View style={styles.controls}>
+        <Pressable onPress={isPlaying ? handleStop : handleStart} style={styles.button}>
+          <Text style={styles.buttonText}>{isPlaying ? 'Stop' : 'Start'}</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -15,21 +109,73 @@ export default function GameScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing.lg,
   },
-  content: {
+  header: {
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
+  },
+  title: {
+    fontSize: fontSize.xl,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  subtitle: {
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
+  },
+  scoreRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: spacing.sm,
+  },
+  score: {
+    color: colors.text,
+    fontWeight: '700',
+  },
+  combo: {
+    color: colors.good,
+    fontWeight: '700',
+  },
+  stats: {
+    color: colors.textSecondary,
+  },
+  playfield: {
     flex: 1,
+    marginVertical: spacing.md,
+    backgroundColor: colors.backgroundDark,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  hitZone: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 40,
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 10,
+  hitZoneText: {
+    color: colors.primary,
+    fontSize: fontSize.xs,
+    letterSpacing: 2,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#888',
+  controls: {
+    paddingBottom: spacing.lg,
+  },
+  button: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: colors.text,
+    fontWeight: '700',
   },
 });
