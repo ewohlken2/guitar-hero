@@ -15,7 +15,7 @@ import { ChordDiagram } from '../../src/components/ChordDiagram';
 import { colors, spacing, fontSize, borderRadius } from '../../src/constants/theme';
 import { Chord } from '../../src/types';
 
-type FilterType = 'all' | 'major' | 'minor' | '7th';
+type FilterType = 'all' | 'major' | 'minor' | '7th' | 'sus' | 'power' | 'extended';
 
 export default function LibraryScreen() {
   const router = useRouter();
@@ -53,6 +53,8 @@ export default function LibraryScreen() {
     { key: 'major', label: 'Major' },
     { key: 'minor', label: 'Minor' },
     { key: '7th', label: '7th' },
+    { key: 'sus', label: 'Sus' },
+    { key: 'power', label: 'Power' },
   ];
 
   return (
