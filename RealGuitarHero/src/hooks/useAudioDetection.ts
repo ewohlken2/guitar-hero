@@ -5,7 +5,15 @@ import { matchChordFromNotes } from '../utils/chordMatching';
 import { chords } from '../constants/chords';
 
 export const useAudioDetection = () => {
-  const { setListening, setCurrentChord, addToHistory, setError } = useAudioStore();
+  const {
+    isListening,
+    currentChord,
+    chordHistory,
+    setListening,
+    setCurrentChord,
+    addToHistory,
+    setError,
+  } = useAudioStore();
 
   useEffect(() => {
     const subscription = addListener((event) => {
@@ -27,6 +35,9 @@ export const useAudioDetection = () => {
   }, [addToHistory, setCurrentChord]);
 
   return {
+    isListening,
+    currentChord,
+    chordHistory,
     start: () => {
       setError(null);
       setListening(true);
