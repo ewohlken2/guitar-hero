@@ -7,6 +7,7 @@ const cards = [
   { title: 'Freeplay', description: 'Practice chords with real-time feedback', route: '/(tabs)/freeplay' },
   { title: 'Game Mode', description: 'Play along with falling notes', route: '/(tabs)/game' },
   { title: 'Library', description: 'Browse chord diagrams', route: '/(tabs)/library' },
+  { title: 'My Songs', description: 'Create and manage custom songs', route: '/songs' },
 ];
 
 export default function HomeScreen() {
