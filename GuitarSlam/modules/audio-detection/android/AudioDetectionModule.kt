@@ -1,4 +1,4 @@
-package com.realguitarhero.audiodetection
+package com.guitarslam.audiodetection
 
 import android.Manifest
 import android.content.pm.PackageManager

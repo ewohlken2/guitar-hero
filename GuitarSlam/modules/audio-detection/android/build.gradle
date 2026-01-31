@@ -4,11 +4,11 @@ plugins {
     id 'expo-module-gradle-plugin'
 }
 
-group = 'com.realguitarhero'
+group = 'com.guitarslam'
 version = '1.0.0'
 
 android {
-    namespace "com.realguitarhero.audiodetection"
+    namespace "com.guitarslam.audiodetection"
 
     compileSdkVersion safeExtGet('compileSdkVersion', 34)
 

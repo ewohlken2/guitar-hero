@@ -23,17 +23,20 @@
 ## Task 1: Initialize Expo Project
 
 **Files:**
-- Create: `RealGuitarHero/` (project directory)
-- Create: `RealGuitarHero/package.json`
-- Create: `RealGuitarHero/app.json`
-- Create: `RealGuitarHero/tsconfig.json`
+
+- Create: `GuitarSlam/` (project directory)
+- Create: `GuitarSlam/package.json`
+- Create: `GuitarSlam/app.json`
+- Create: `GuitarSlam/tsconfig.json`
 
 **Step 1: Create Expo project**
 
 Run:
+
 ```bash
-cd C:/Users/Administrator/projects/real-guitar-hero
-npx create-expo-app@latest RealGuitarHero --template blank-typescript
+wsl
+cd ~/projects/guitar-slam
+npx create-expo-app@latest GuitarSlam --template blank-typescript
 ```
 
 Expected: Project created with TypeScript template
@@ -41,13 +44,15 @@ Expected: Project created with TypeScript template
 **Step 2: Navigate to project directory**
 
 Run:
+
 ```bash
-cd RealGuitarHero
+cd GuitarSlam
 ```
 
 **Step 3: Install core dependencies**
 
 Run:
+
 ```bash
 npx expo install expo-router expo-dev-client expo-linking expo-constants expo-status-bar react-native-safe-area-context react-native-screens react-native-gesture-handler react-native-reanimated
 ```
@@ -57,6 +62,7 @@ Expected: Dependencies installed successfully
 **Step 4: Install additional dependencies**
 
 Run:
+
 ```bash
 npm install zustand @react-native-async-storage/async-storage
 npx expo install @react-native-async-storage/async-storage
@@ -67,6 +73,7 @@ Expected: Zustand and AsyncStorage installed
 **Step 5: Install dev dependencies**
 
 Run:
+
 ```bash
 npm install -D jest @testing-library/react-native @testing-library/jest-native @types/jest
 ```
@@ -87,15 +94,16 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 2: Configure Expo Router
 
 **Files:**
-- Modify: `RealGuitarHero/package.json`
-- Modify: `RealGuitarHero/app.json`
-- Create: `RealGuitarHero/app/_layout.tsx`
-- Create: `RealGuitarHero/app/(tabs)/_layout.tsx`
-- Create: `RealGuitarHero/app/(tabs)/index.tsx`
-- Create: `RealGuitarHero/app/(tabs)/game.tsx`
-- Create: `RealGuitarHero/app/(tabs)/freeplay.tsx`
-- Create: `RealGuitarHero/app/(tabs)/library.tsx`
-- Delete: `RealGuitarHero/App.tsx`
+
+- Modify: `GuitarSlam/package.json`
+- Modify: `GuitarSlam/app.json`
+- Create: `GuitarSlam/app/_layout.tsx`
+- Create: `GuitarSlam/app/(tabs)/_layout.tsx`
+- Create: `GuitarSlam/app/(tabs)/index.tsx`
+- Create: `GuitarSlam/app/(tabs)/game.tsx`
+- Create: `GuitarSlam/app/(tabs)/freeplay.tsx`
+- Create: `GuitarSlam/app/(tabs)/library.tsx`
+- Delete: `GuitarSlam/App.tsx`
 
 **Step 1: Update package.json main entry**
 
@@ -114,8 +122,8 @@ Edit `app.json`:
 ```json
 {
   "expo": {
-    "name": "Real Guitar Hero",
-    "slug": "real-guitar-hero",
+    "name": "Guitar Slam",
+    "slug": "guitar-slam",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -128,9 +136,9 @@ Edit `app.json`:
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.realguitarhero.app",
+      "bundleIdentifier": "com.guitarslam.app",
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "Real Guitar Hero needs microphone access to detect the chords you play on your guitar."
+        "NSMicrophoneUsageDescription": "Guitar Slam needs microphone access to detect the chords you play on your guitar."
       }
     },
     "android": {
@@ -138,13 +146,13 @@ Edit `app.json`:
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1a1a2e"
       },
-      "package": "com.realguitarhero.app",
+      "package": "com.guitarslam.app",
       "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "realguitarhero",
+    "scheme": "guitarslam",
     "plugins": ["expo-router"]
   }
 }
@@ -153,6 +161,7 @@ Edit `app.json`:
 **Step 3: Delete old App.tsx**
 
 Run:
+
 ```bash
 rm App.tsx
 ```
@@ -162,8 +171,8 @@ rm App.tsx
 Create `app/_layout.tsx`:
 
 ```tsx
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   return (
@@ -182,8 +191,8 @@ export default function RootLayout() {
 Create `app/(tabs)/_layout.tsx`:
 
 ```tsx
-import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { Tabs } from "expo-router";
+import { Text } from "react-native";
 
 export default function TabsLayout() {
   return (
@@ -191,39 +200,47 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#1a1a2e',
-          borderTopColor: '#2d2d44',
+          backgroundColor: "#1a1a2e",
+          borderTopColor: "#2d2d44",
         },
-        tabBarActiveTintColor: '#4ecdc4',
-        tabBarInactiveTintColor: '#888',
+        tabBarActiveTintColor: "#4ecdc4",
+        tabBarInactiveTintColor: "#888",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🏠</Text>,
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20 }}>🏠</Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="game"
         options={{
-          title: 'Game',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🎮</Text>,
+          title: "Game",
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20 }}>🎮</Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="freeplay"
         options={{
-          title: 'Freeplay',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🎸</Text>,
+          title: "Freeplay",
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20 }}>🎸</Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
-          title: 'Library',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>📚</Text>,
+          title: "Library",
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 20 }}>📚</Text>
+          ),
         }}
       />
     </Tabs>
@@ -236,15 +253,17 @@ export default function TabsLayout() {
 Create `app/(tabs)/index.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Real Guitar Hero</Text>
-        <Text style={styles.subtitle}>Practice guitar with real-time feedback</Text>
+        <Text style={styles.subtitle}>
+          Practice guitar with real-time feedback
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -253,24 +272,24 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: "#1a1a2e",
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
+    color: "#888",
+    textAlign: "center",
   },
 });
 ```
@@ -280,8 +299,8 @@ const styles = StyleSheet.create({
 Create `app/(tabs)/game.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GameScreen() {
   return (
@@ -297,22 +316,22 @@ export default function GameScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: "#1a1a2e",
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#888',
+    color: "#888",
   },
 });
 ```
@@ -322,8 +341,8 @@ const styles = StyleSheet.create({
 Create `app/(tabs)/freeplay.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FreeplayScreen() {
   return (
@@ -339,22 +358,22 @@ export default function FreeplayScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: "#1a1a2e",
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#888',
+    color: "#888",
   },
 });
 ```
@@ -364,8 +383,8 @@ const styles = StyleSheet.create({
 Create `app/(tabs)/library.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LibraryScreen() {
   return (
@@ -381,22 +400,22 @@ export default function LibraryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: "#1a1a2e",
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#888',
+    color: "#888",
   },
 });
 ```
@@ -404,6 +423,7 @@ const styles = StyleSheet.create({
 **Step 10: Verify app starts**
 
 Run:
+
 ```bash
 npx expo start
 ```
@@ -429,11 +449,13 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 3: Configure EAS Build
 
 **Files:**
-- Create: `RealGuitarHero/eas.json`
+
+- Create: `GuitarSlam/eas.json`
 
 **Step 1: Login to EAS**
 
 Run:
+
 ```bash
 eas login
 ```
@@ -443,6 +465,7 @@ Expected: Prompted for Expo credentials, successful login
 **Step 2: Configure EAS**
 
 Run:
+
 ```bash
 eas build:configure
 ```
@@ -491,18 +514,20 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 4: Set Up Project Structure
 
 **Files:**
-- Create: `RealGuitarHero/src/components/.gitkeep`
-- Create: `RealGuitarHero/src/hooks/.gitkeep`
-- Create: `RealGuitarHero/src/stores/.gitkeep`
-- Create: `RealGuitarHero/src/types/index.ts`
-- Create: `RealGuitarHero/src/constants/theme.ts`
-- Create: `RealGuitarHero/src/constants/chords.ts`
-- Create: `RealGuitarHero/src/utils/.gitkeep`
-- Create: `RealGuitarHero/assets/songs/.gitkeep`
+
+- Create: `GuitarSlam/src/components/.gitkeep`
+- Create: `GuitarSlam/src/hooks/.gitkeep`
+- Create: `GuitarSlam/src/stores/.gitkeep`
+- Create: `GuitarSlam/src/types/index.ts`
+- Create: `GuitarSlam/src/constants/theme.ts`
+- Create: `GuitarSlam/src/constants/chords.ts`
+- Create: `GuitarSlam/src/utils/.gitkeep`
+- Create: `GuitarSlam/assets/songs/.gitkeep`
 
 **Step 1: Create directory structure**
 
 Run:
+
 ```bash
 mkdir -p src/components src/hooks src/stores src/types src/constants src/utils assets/songs
 touch src/components/.gitkeep src/hooks/.gitkeep src/stores/.gitkeep src/utils/.gitkeep assets/songs/.gitkeep
@@ -525,8 +550,16 @@ export interface Chord {
   id: string;
   primaryName: string;
   alternateNames: string[];
-  type: 'major' | 'minor' | '7th' | 'sus' | 'aug' | 'dim' | 'extended' | 'power';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  type:
+    | "major"
+    | "minor"
+    | "7th"
+    | "sus"
+    | "aug"
+    | "dim"
+    | "extended"
+    | "power";
+  difficulty: "beginner" | "intermediate" | "advanced";
   notes: string[];
   diagram: ChordDiagram;
   alternateVoicings?: ChordDiagram[];
@@ -583,7 +616,7 @@ export interface GameState {
 }
 
 // Hit result types
-export type HitType = 'perfect' | 'good' | 'miss';
+export type HitType = "perfect" | "good" | "miss";
 
 export interface HitResult {
   type: HitType;
@@ -600,37 +633,37 @@ Create `src/constants/theme.ts`:
 ```ts
 export const colors = {
   // Background colors
-  background: '#1a1a2e',
-  backgroundLight: '#2d2d44',
-  backgroundDark: '#0f0f1a',
+  background: "#1a1a2e",
+  backgroundLight: "#2d2d44",
+  backgroundDark: "#0f0f1a",
 
   // Primary colors
-  primary: '#4ecdc4',
-  primaryDark: '#3db3ab',
+  primary: "#4ecdc4",
+  primaryDark: "#3db3ab",
 
   // Accent colors
-  accent: '#ff6b6b',
-  accentDark: '#e55555',
+  accent: "#ff6b6b",
+  accentDark: "#e55555",
 
   // Text colors
-  text: '#ffffff',
-  textSecondary: '#888888',
-  textMuted: '#555555',
+  text: "#ffffff",
+  textSecondary: "#888888",
+  textMuted: "#555555",
 
   // Status colors
-  success: '#4ecdc4',
-  warning: '#ffd93d',
-  error: '#ff6b6b',
+  success: "#4ecdc4",
+  warning: "#ffd93d",
+  error: "#ff6b6b",
 
   // Game specific
-  perfect: '#4ecdc4',
-  good: '#ffd93d',
-  miss: '#ff6b6b',
+  perfect: "#4ecdc4",
+  good: "#ffd93d",
+  miss: "#ff6b6b",
 
   // Chord confidence
-  highConfidence: '#4ecdc4',
-  mediumConfidence: '#ffd93d',
-  lowConfidence: '#888888',
+  highConfidence: "#4ecdc4",
+  mediumConfidence: "#ffd93d",
+  lowConfidence: "#888888",
 };
 
 export const spacing = {
@@ -666,17 +699,17 @@ export const borderRadius = {
 Create `src/constants/chords.ts`:
 
 ```ts
-import { Chord } from '../types';
+import { Chord } from "../types";
 
 export const chords: Chord[] = [
   // Major chords
   {
-    id: 'c-major',
-    primaryName: 'C',
-    alternateNames: ['Cmaj', 'CM'],
-    type: 'major',
-    difficulty: 'beginner',
-    notes: ['C', 'E', 'G'],
+    id: "c-major",
+    primaryName: "C",
+    alternateNames: ["Cmaj", "CM"],
+    type: "major",
+    difficulty: "beginner",
+    notes: ["C", "E", "G"],
     diagram: {
       strings: [-1, 3, 2, 0, 1, 0],
       fingers: [0, 3, 2, 0, 1, 0],
@@ -684,12 +717,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'd-major',
-    primaryName: 'D',
-    alternateNames: ['Dmaj', 'DM'],
-    type: 'major',
-    difficulty: 'beginner',
-    notes: ['D', 'F#', 'A'],
+    id: "d-major",
+    primaryName: "D",
+    alternateNames: ["Dmaj", "DM"],
+    type: "major",
+    difficulty: "beginner",
+    notes: ["D", "F#", "A"],
     diagram: {
       strings: [-1, -1, 0, 2, 3, 2],
       fingers: [0, 0, 0, 1, 3, 2],
@@ -697,12 +730,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'e-major',
-    primaryName: 'E',
-    alternateNames: ['Emaj', 'EM'],
-    type: 'major',
-    difficulty: 'beginner',
-    notes: ['E', 'G#', 'B'],
+    id: "e-major",
+    primaryName: "E",
+    alternateNames: ["Emaj", "EM"],
+    type: "major",
+    difficulty: "beginner",
+    notes: ["E", "G#", "B"],
     diagram: {
       strings: [0, 2, 2, 1, 0, 0],
       fingers: [0, 2, 3, 1, 0, 0],
@@ -710,12 +743,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'g-major',
-    primaryName: 'G',
-    alternateNames: ['Gmaj', 'GM'],
-    type: 'major',
-    difficulty: 'beginner',
-    notes: ['G', 'B', 'D'],
+    id: "g-major",
+    primaryName: "G",
+    alternateNames: ["Gmaj", "GM"],
+    type: "major",
+    difficulty: "beginner",
+    notes: ["G", "B", "D"],
     diagram: {
       strings: [3, 2, 0, 0, 0, 3],
       fingers: [2, 1, 0, 0, 0, 3],
@@ -723,12 +756,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'a-major',
-    primaryName: 'A',
-    alternateNames: ['Amaj', 'AM'],
-    type: 'major',
-    difficulty: 'beginner',
-    notes: ['A', 'C#', 'E'],
+    id: "a-major",
+    primaryName: "A",
+    alternateNames: ["Amaj", "AM"],
+    type: "major",
+    difficulty: "beginner",
+    notes: ["A", "C#", "E"],
     diagram: {
       strings: [-1, 0, 2, 2, 2, 0],
       fingers: [0, 0, 1, 2, 3, 0],
@@ -737,12 +770,12 @@ export const chords: Chord[] = [
   },
   // Minor chords
   {
-    id: 'a-minor',
-    primaryName: 'Am',
-    alternateNames: ['Amin'],
-    type: 'minor',
-    difficulty: 'beginner',
-    notes: ['A', 'C', 'E'],
+    id: "a-minor",
+    primaryName: "Am",
+    alternateNames: ["Amin"],
+    type: "minor",
+    difficulty: "beginner",
+    notes: ["A", "C", "E"],
     diagram: {
       strings: [-1, 0, 2, 2, 1, 0],
       fingers: [0, 0, 2, 3, 1, 0],
@@ -750,12 +783,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'd-minor',
-    primaryName: 'Dm',
-    alternateNames: ['Dmin'],
-    type: 'minor',
-    difficulty: 'beginner',
-    notes: ['D', 'F', 'A'],
+    id: "d-minor",
+    primaryName: "Dm",
+    alternateNames: ["Dmin"],
+    type: "minor",
+    difficulty: "beginner",
+    notes: ["D", "F", "A"],
     diagram: {
       strings: [-1, -1, 0, 2, 3, 1],
       fingers: [0, 0, 0, 2, 3, 1],
@@ -763,12 +796,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'e-minor',
-    primaryName: 'Em',
-    alternateNames: ['Emin'],
-    type: 'minor',
-    difficulty: 'beginner',
-    notes: ['E', 'G', 'B'],
+    id: "e-minor",
+    primaryName: "Em",
+    alternateNames: ["Emin"],
+    type: "minor",
+    difficulty: "beginner",
+    notes: ["E", "G", "B"],
     diagram: {
       strings: [0, 2, 2, 0, 0, 0],
       fingers: [0, 2, 3, 0, 0, 0],
@@ -777,12 +810,12 @@ export const chords: Chord[] = [
   },
   // 7th chords
   {
-    id: 'a7',
-    primaryName: 'A7',
-    alternateNames: ['Adom7'],
-    type: '7th',
-    difficulty: 'beginner',
-    notes: ['A', 'C#', 'E', 'G'],
+    id: "a7",
+    primaryName: "A7",
+    alternateNames: ["Adom7"],
+    type: "7th",
+    difficulty: "beginner",
+    notes: ["A", "C#", "E", "G"],
     diagram: {
       strings: [-1, 0, 2, 0, 2, 0],
       fingers: [0, 0, 1, 0, 2, 0],
@@ -790,12 +823,12 @@ export const chords: Chord[] = [
     },
   },
   {
-    id: 'e7',
-    primaryName: 'E7',
-    alternateNames: ['Edom7'],
-    type: '7th',
-    difficulty: 'beginner',
-    notes: ['E', 'G#', 'B', 'D'],
+    id: "e7",
+    primaryName: "E7",
+    alternateNames: ["Edom7"],
+    type: "7th",
+    difficulty: "beginner",
+    notes: ["E", "G#", "B", "D"],
     diagram: {
       strings: [0, 2, 0, 1, 0, 0],
       fingers: [0, 2, 0, 1, 0, 0],
@@ -810,17 +843,19 @@ export function findChordByName(name: string): Chord | undefined {
   return chords.find(
     (chord) =>
       chord.primaryName.toLowerCase() === normalizedName ||
-      chord.alternateNames.some((alt) => alt.toLowerCase() === normalizedName)
+      chord.alternateNames.some((alt) => alt.toLowerCase() === normalizedName),
   );
 }
 
 // Helper function to get chords by type
-export function getChordsByType(type: Chord['type']): Chord[] {
+export function getChordsByType(type: Chord["type"]): Chord[] {
   return chords.filter((chord) => chord.type === type);
 }
 
 // Helper function to get chords by difficulty
-export function getChordsByDifficulty(difficulty: Chord['difficulty']): Chord[] {
+export function getChordsByDifficulty(
+  difficulty: Chord["difficulty"],
+): Chord[] {
   return chords.filter((chord) => chord.difficulty === difficulty);
 }
 ```
@@ -844,55 +879,56 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 5: Create Zustand Store for App State
 
 **Files:**
-- Create: `RealGuitarHero/src/stores/useAppStore.ts`
-- Create: `RealGuitarHero/src/stores/useAudioStore.ts`
-- Create: `RealGuitarHero/src/stores/useGameStore.ts`
-- Test: `RealGuitarHero/__tests__/stores/useGameStore.test.ts`
+
+- Create: `GuitarSlam/src/stores/useAppStore.ts`
+- Create: `GuitarSlam/src/stores/useAudioStore.ts`
+- Create: `GuitarSlam/src/stores/useGameStore.ts`
+- Test: `GuitarSlam/__tests__/stores/useGameStore.test.ts`
 
 **Step 1: Write failing test for game store**
 
 Create `__tests__/stores/useGameStore.test.ts`:
 
 ```ts
-import { useGameStore } from '../../src/stores/useGameStore';
+import { useGameStore } from "../../src/stores/useGameStore";
 
-describe('useGameStore', () => {
+describe("useGameStore", () => {
   beforeEach(() => {
     useGameStore.getState().reset();
   });
 
-  it('should start with initial state', () => {
+  it("should start with initial state", () => {
     const state = useGameStore.getState();
     expect(state.score).toBe(0);
     expect(state.combo).toBe(0);
     expect(state.isPlaying).toBe(false);
   });
 
-  it('should add score with combo multiplier', () => {
+  it("should add score with combo multiplier", () => {
     const { addHit } = useGameStore.getState();
 
     // First hit: 1x multiplier
-    addHit('perfect');
+    addHit("perfect");
     expect(useGameStore.getState().score).toBe(100);
     expect(useGameStore.getState().combo).toBe(1);
 
     // More hits to build combo
     for (let i = 0; i < 9; i++) {
-      addHit('perfect');
+      addHit("perfect");
     }
     // 10th hit: now at 2x multiplier
     expect(useGameStore.getState().combo).toBe(10);
 
-    addHit('perfect');
+    addHit("perfect");
     // 11th hit with 2x: 100 * 2 = 200 added
     expect(useGameStore.getState().score).toBe(1000 + 200);
   });
 
-  it('should reset combo on miss', () => {
+  it("should reset combo on miss", () => {
     const { addHit, addMiss } = useGameStore.getState();
 
-    addHit('perfect');
-    addHit('perfect');
+    addHit("perfect");
+    addHit("perfect");
     expect(useGameStore.getState().combo).toBe(2);
 
     addMiss();
@@ -900,17 +936,17 @@ describe('useGameStore', () => {
     expect(useGameStore.getState().misses).toBe(1);
   });
 
-  it('should track max combo', () => {
+  it("should track max combo", () => {
     const { addHit, addMiss } = useGameStore.getState();
 
     for (let i = 0; i < 5; i++) {
-      addHit('perfect');
+      addHit("perfect");
     }
     expect(useGameStore.getState().maxCombo).toBe(5);
 
     addMiss();
-    addHit('perfect');
-    addHit('perfect');
+    addHit("perfect");
+    addHit("perfect");
 
     // Max combo should still be 5
     expect(useGameStore.getState().maxCombo).toBe(5);
@@ -922,6 +958,7 @@ describe('useGameStore', () => {
 **Step 2: Run test to verify it fails**
 
 Run:
+
 ```bash
 npm test -- __tests__/stores/useGameStore.test.ts
 ```
@@ -933,7 +970,7 @@ Expected: FAIL - Cannot find module '../../src/stores/useGameStore'
 Create `src/stores/useAppStore.ts`:
 
 ```ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface AppState {
   isInitialized: boolean;
@@ -951,8 +988,8 @@ export const useAppStore = create<AppState>((set) => ({
 Create `src/stores/useAudioStore.ts`:
 
 ```ts
-import { create } from 'zustand';
-import { DetectedChord } from '../types';
+import { create } from "zustand";
+import { DetectedChord } from "../types";
 
 interface AudioState {
   isListening: boolean;
@@ -996,8 +1033,8 @@ export const useAudioStore = create<AudioState>((set) => ({
 Create `src/stores/useGameStore.ts`:
 
 ```ts
-import { create } from 'zustand';
-import { Song, HitType } from '../types';
+import { create } from "zustand";
+import { Song, HitType } from "../types";
 
 interface GameState {
   currentSong: Song | null;
@@ -1028,9 +1065,9 @@ const getComboMultiplier = (combo: number): number => {
 
 const getPointsForHit = (type: HitType): number => {
   switch (type) {
-    case 'perfect':
+    case "perfect":
       return 100;
-    case 'good':
+    case "good":
       return 50;
     default:
       return 0;
@@ -1055,7 +1092,15 @@ export const useGameStore = create<GameState>((set) => ({
 
   setLevel: (level) => set({ currentLevel: level }),
 
-  startGame: () => set({ isPlaying: true, score: 0, combo: 0, maxCombo: 0, hits: 0, misses: 0 }),
+  startGame: () =>
+    set({
+      isPlaying: true,
+      score: 0,
+      combo: 0,
+      maxCombo: 0,
+      hits: 0,
+      misses: 0,
+    }),
 
   endGame: () => set({ isPlaying: false }),
 
@@ -1086,6 +1131,7 @@ export const useGameStore = create<GameState>((set) => ({
 **Step 6: Run test to verify it passes**
 
 Run:
+
 ```bash
 npm test -- __tests__/stores/useGameStore.test.ts
 ```
@@ -1111,30 +1157,31 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 6: Create Chord Diagram Component
 
 **Files:**
-- Create: `RealGuitarHero/src/components/ChordDiagram.tsx`
-- Test: `RealGuitarHero/__tests__/components/ChordDiagram.test.tsx`
+
+- Create: `GuitarSlam/src/components/ChordDiagram.tsx`
+- Test: `GuitarSlam/__tests__/components/ChordDiagram.test.tsx`
 
 **Step 1: Write failing test**
 
 Create `__tests__/components/ChordDiagram.test.tsx`:
 
 ```tsx
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { ChordDiagram } from '../../src/components/ChordDiagram';
-import { chords } from '../../src/constants/chords';
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { ChordDiagram } from "../../src/components/ChordDiagram";
+import { chords } from "../../src/constants/chords";
 
-describe('ChordDiagram', () => {
-  const gMajor = chords.find((c) => c.id === 'g-major')!;
+describe("ChordDiagram", () => {
+  const gMajor = chords.find((c) => c.id === "g-major")!;
 
-  it('renders chord name', () => {
+  it("renders chord name", () => {
     render(<ChordDiagram chord={gMajor} />);
-    expect(screen.getByText('G')).toBeTruthy();
+    expect(screen.getByText("G")).toBeTruthy();
   });
 
-  it('renders with custom size', () => {
+  it("renders with custom size", () => {
     render(<ChordDiagram chord={gMajor} size="large" />);
-    expect(screen.getByText('G')).toBeTruthy();
+    expect(screen.getByText("G")).toBeTruthy();
   });
 });
 ```
@@ -1142,6 +1189,7 @@ describe('ChordDiagram', () => {
 **Step 2: Run test to verify it fails**
 
 Run:
+
 ```bash
 npm test -- __tests__/components/ChordDiagram.test.tsx
 ```
@@ -1153,14 +1201,14 @@ Expected: FAIL - Cannot find module
 Create `src/components/ChordDiagram.tsx`:
 
 ```tsx
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Chord } from '../types';
-import { colors, spacing, fontSize } from '../constants/theme';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Chord } from "../types";
+import { colors, spacing, fontSize } from "../constants/theme";
 
 interface ChordDiagramProps {
   chord: Chord;
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   showName?: boolean;
 }
 
@@ -1170,7 +1218,11 @@ const sizeConfig = {
   large: { width: 180, fretHeight: 36, fontSize: fontSize.lg },
 };
 
-export function ChordDiagram({ chord, size = 'medium', showName = true }: ChordDiagramProps) {
+export function ChordDiagram({
+  chord,
+  size = "medium",
+  showName = true,
+}: ChordDiagramProps) {
   const config = sizeConfig[size];
   const stringSpacing = config.width / 6;
   const fretCount = 5;
@@ -1319,38 +1371,38 @@ export function ChordDiagram({ chord, size = 'medium', showName = true }: ChordD
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   chordName: {
     color: colors.text,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: spacing.sm,
   },
   diagramContainer: {
-    position: 'relative',
+    position: "relative",
   },
   stringsContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   string: {
-    position: 'absolute',
+    position: "absolute",
     width: 2,
     backgroundColor: colors.textSecondary,
     top: 0,
   },
   fretsContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   fret: {
-    position: 'absolute',
+    position: "absolute",
     height: 2,
     backgroundColor: colors.textSecondary,
   },
@@ -1359,24 +1411,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.text,
   },
   dot: {
-    position: 'absolute',
+    position: "absolute",
     backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   fingerText: {
     color: colors.backgroundDark,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   muteMarker: {
-    position: 'absolute',
+    position: "absolute",
     color: colors.textSecondary,
   },
   openMarker: {
-    position: 'absolute',
+    position: "absolute",
     borderWidth: 2,
     borderColor: colors.textSecondary,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
 });
 ```
@@ -1384,6 +1436,7 @@ const styles = StyleSheet.create({
 **Step 4: Run test to verify it passes**
 
 Run:
+
 ```bash
 npm test -- __tests__/components/ChordDiagram.test.tsx
 ```
@@ -1409,15 +1462,16 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 7: Create Chord Library Screen
 
 **Files:**
-- Modify: `RealGuitarHero/app/(tabs)/library.tsx`
-- Create: `RealGuitarHero/app/chord/[id].tsx`
+
+- Modify: `GuitarSlam/app/(tabs)/library.tsx`
+- Create: `GuitarSlam/app/chord/[id].tsx`
 
 **Step 1: Update Library screen with chord list**
 
 Replace `app/(tabs)/library.tsx`:
 
 ```tsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -1426,33 +1480,36 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { chords } from '../../src/constants/chords';
-import { ChordDiagram } from '../../src/components/ChordDiagram';
-import { colors, spacing, fontSize, borderRadius } from '../../src/constants/theme';
-import { Chord } from '../../src/types';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { chords } from "../../src/constants/chords";
+import { ChordDiagram } from "../../src/components/ChordDiagram";
+import {
+  colors,
+  spacing,
+  fontSize,
+  borderRadius,
+} from "../../src/constants/theme";
+import { Chord } from "../../src/types";
 
-type FilterType = 'all' | 'major' | 'minor' | '7th';
+type FilterType = "all" | "major" | "minor" | "7th";
 
 export default function LibraryScreen() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filter, setFilter] = useState<FilterType>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<FilterType>("all");
 
   const filteredChords = useMemo(() => {
     return chords.filter((chord) => {
       const matchesSearch =
-        searchQuery === '' ||
+        searchQuery === "" ||
         chord.primaryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         chord.alternateNames.some((name) =>
-          name.toLowerCase().includes(searchQuery.toLowerCase())
+          name.toLowerCase().includes(searchQuery.toLowerCase()),
         );
 
-      const matchesFilter =
-        filter === 'all' ||
-        chord.type === filter;
+      const matchesFilter = filter === "all" || chord.type === filter;
 
       return matchesSearch && matchesFilter;
     });
@@ -1475,10 +1532,10 @@ export default function LibraryScreen() {
   );
 
   const filters: { key: FilterType; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'major', label: 'Major' },
-    { key: 'minor', label: 'Minor' },
-    { key: '7th', label: '7th' },
+    { key: "all", label: "All" },
+    { key: "major", label: "Major" },
+    { key: "minor", label: "Minor" },
+    { key: "7th", label: "7th" },
   ];
 
   return (
@@ -1542,7 +1599,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSize.xxl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.text,
     marginBottom: spacing.md,
   },
@@ -1555,7 +1612,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   filterRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: spacing.sm,
   },
   filterButton: {
@@ -1573,46 +1630,46 @@ const styles = StyleSheet.create({
   },
   filterTextActive: {
     color: colors.backgroundDark,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   listContent: {
     padding: spacing.md,
     paddingTop: 0,
   },
   row: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   chordCard: {
-    width: '48%',
+    width: "48%",
     backgroundColor: colors.backgroundLight,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     marginBottom: spacing.md,
-    alignItems: 'center',
+    alignItems: "center",
   },
   chordCardPressed: {
     opacity: 0.7,
   },
   chordInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
     marginTop: spacing.sm,
   },
   chordType: {
     color: colors.textSecondary,
     fontSize: fontSize.xs,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
   },
   chordDifficulty: {
     color: colors.primary,
     fontSize: fontSize.xs,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: spacing.xxl,
   },
   emptyText: {
@@ -1627,13 +1684,24 @@ const styles = StyleSheet.create({
 Create `app/chord/[id].tsx`:
 
 ```tsx
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { chords } from '../../src/constants/chords';
-import { ChordDiagram } from '../../src/components/ChordDiagram';
-import { colors, spacing, fontSize, borderRadius } from '../../src/constants/theme';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { chords } from "../../src/constants/chords";
+import { ChordDiagram } from "../../src/components/ChordDiagram";
+import {
+  colors,
+  spacing,
+  fontSize,
+  borderRadius,
+} from "../../src/constants/theme";
 
 export default function ChordDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -1646,7 +1714,10 @@ export default function ChordDetailScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Chord not found</Text>
-          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Text style={styles.backButtonText}>Go Back</Text>
           </TouchableOpacity>
         </View>
@@ -1657,7 +1728,10 @@ export default function ChordDetailScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
 
@@ -1665,7 +1739,7 @@ export default function ChordDetailScreen() {
           <Text style={styles.chordName}>{chord.primaryName}</Text>
           {chord.alternateNames.length > 0 && (
             <Text style={styles.alternateNames}>
-              Also known as: {chord.alternateNames.join(', ')}
+              Also known as: {chord.alternateNames.join(", ")}
             </Text>
           )}
         </View>
@@ -1685,18 +1759,17 @@ export default function ChordDetailScreen() {
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Notes</Text>
-            <Text style={styles.infoValue}>{chord.notes.join(' - ')}</Text>
+            <Text style={styles.infoValue}>{chord.notes.join(" - ")}</Text>
           </View>
         </View>
 
         <View style={styles.tipsSection}>
           <Text style={styles.sectionTitle}>Tips</Text>
           <Text style={styles.tipText}>
-            • Numbers on dots indicate which finger to use (1=index, 2=middle, 3=ring, 4=pinky)
+            • Numbers on dots indicate which finger to use (1=index, 2=middle,
+            3=ring, 4=pinky)
           </Text>
-          <Text style={styles.tipText}>
-            • X means don't play that string
-          </Text>
+          <Text style={styles.tipText}>• X means don't play that string</Text>
           <Text style={styles.tipText}>
             • O means play the string open (no finger)
           </Text>
@@ -1722,12 +1795,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
   },
   headerSection: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: spacing.xl,
   },
   chordName: {
     fontSize: fontSize.huge,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.text,
   },
   alternateNames: {
@@ -1736,7 +1809,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   diagramSection: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: spacing.xl,
     backgroundColor: colors.backgroundLight,
     padding: spacing.xl,
@@ -1749,8 +1822,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: colors.backgroundDark,
@@ -1762,8 +1835,8 @@ const styles = StyleSheet.create({
   infoValue: {
     color: colors.text,
     fontSize: fontSize.md,
-    fontWeight: '600',
-    textTransform: 'capitalize',
+    fontWeight: "600",
+    textTransform: "capitalize",
   },
   tipsSection: {
     backgroundColor: colors.backgroundLight,
@@ -1773,7 +1846,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: colors.text,
     fontSize: fontSize.lg,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: spacing.md,
   },
   tipText: {
@@ -1784,8 +1857,8 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   errorText: {
     color: colors.error,
@@ -1798,6 +1871,7 @@ const styles = StyleSheet.create({
 **Step 3: Verify app works**
 
 Run:
+
 ```bash
 npx expo start
 ```
@@ -1822,7 +1896,8 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Task 8: Expand Chord Database to 50 Chords
 
 **Files:**
-- Modify: `RealGuitarHero/src/constants/chords.ts`
+
+- Modify: `GuitarSlam/src/constants/chords.ts`
 
 **Step 1: Add remaining chords**
 
@@ -2476,23 +2551,31 @@ Update `app/(tabs)/library.tsx` to include more filter options:
 
 ```tsx
 // Update the filters array and FilterType
-type FilterType = 'all' | 'major' | 'minor' | '7th' | 'sus' | 'power' | 'extended';
+type FilterType =
+  | "all"
+  | "major"
+  | "minor"
+  | "7th"
+  | "sus"
+  | "power"
+  | "extended";
 
 // ...
 
 const filters: { key: FilterType; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'major', label: 'Major' },
-  { key: 'minor', label: 'Minor' },
-  { key: '7th', label: '7th' },
-  { key: 'sus', label: 'Sus' },
-  { key: 'power', label: 'Power' },
+  { key: "all", label: "All" },
+  { key: "major", label: "Major" },
+  { key: "minor", label: "Minor" },
+  { key: "7th", label: "7th" },
+  { key: "sus", label: "Sus" },
+  { key: "power", label: "Power" },
 ];
 ```
 
 **Step 3: Verify chord count**
 
 Run:
+
 ```bash
 npx expo start
 ```
@@ -2525,6 +2608,7 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ## Summary & Next Tasks
 
 **Completed in this plan:**
+
 1. Project initialization with Expo and TypeScript
 2. Expo Router configuration with tab navigation
 3. EAS Build configuration
@@ -2535,6 +2619,7 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 8. 50-chord database
 
 **Remaining for Phase 1 MVP (next plan document):**
+
 - Task 9: Create mock audio detection hook
 - Task 10: Build Freeplay Mode screen
 - Task 11: Create sample songs data

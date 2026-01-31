@@ -4,6 +4,6 @@
     "modules": ["AudioDetectionModule"]
   },
   "android": {
-    "modules": ["com.realguitarhero.audiodetection.AudioDetectionModule"]
+    "modules": ["com.guitarslam.audiodetection.AudioDetectionModule"]
   }
 }

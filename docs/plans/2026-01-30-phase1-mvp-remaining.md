@@ -13,20 +13,21 @@
 ### Task 9: Create mock audio detection hook
 
 **Files:**
-- Create: `RealGuitarHero/src/utils/mockAudio.ts`
-- Create: `RealGuitarHero/src/hooks/useMockAudioDetection.ts`
-- Test: `RealGuitarHero/__tests__/utils/mockAudio.test.ts`
+
+- Create: `GuitarSlam/src/utils/mockAudio.ts`
+- Create: `GuitarSlam/src/hooks/useMockAudioDetection.ts`
+- Test: `GuitarSlam/__tests__/utils/mockAudio.test.ts`
 
 **Step 1: Write the failing test**
 
-Create `RealGuitarHero/__tests__/utils/mockAudio.test.ts`:
+Create `GuitarSlam/__tests__/utils/mockAudio.test.ts`:
 
 ```ts
-import { chords } from '../../src/constants/chords';
-import { getMockDetectedChord } from '../../src/utils/mockAudio';
+import { chords } from "../../src/constants/chords";
+import { getMockDetectedChord } from "../../src/utils/mockAudio";
 
-describe('getMockDetectedChord', () => {
-  it('returns a deterministic chord from the list', () => {
+describe("getMockDetectedChord", () => {
+  it("returns a deterministic chord from the list", () => {
     const first = getMockDetectedChord(0, 123);
     const second = getMockDetectedChord(chords.length, 456);
 
@@ -48,13 +49,16 @@ Expected: FAIL with "Cannot find module '../utils/mockAudio'"
 
 **Step 3: Write minimal implementation**
 
-Create `RealGuitarHero/src/utils/mockAudio.ts`:
+Create `GuitarSlam/src/utils/mockAudio.ts`:
 
 ```ts
-import { chords } from '../constants/chords';
-import { DetectedChord } from '../types';
+import { chords } from "../constants/chords";
+import { DetectedChord } from "../types";
 
-export const getMockDetectedChord = (index: number, timestamp = Date.now()): DetectedChord => {
+export const getMockDetectedChord = (
+  index: number,
+  timestamp = Date.now(),
+): DetectedChord => {
   const chord = chords[index % chords.length];
 
   return {
@@ -66,12 +70,12 @@ export const getMockDetectedChord = (index: number, timestamp = Date.now()): Det
 };
 ```
 
-Create `RealGuitarHero/src/hooks/useMockAudioDetection.ts`:
+Create `GuitarSlam/src/hooks/useMockAudioDetection.ts`:
 
 ```ts
-import { useCallback, useEffect, useRef } from 'react';
-import { useAudioStore } from '../stores/useAudioStore';
-import { getMockDetectedChord } from '../utils/mockAudio';
+import { useCallback, useEffect, useRef } from "react";
+import { useAudioStore } from "../stores/useAudioStore";
+import { getMockDetectedChord } from "../utils/mockAudio";
 
 const TICK_MS = 900;
 
@@ -139,7 +143,7 @@ Expected: PASS
 **Step 5: Commit**
 
 ```bash
-git add RealGuitarHero/src/utils/mockAudio.ts RealGuitarHero/src/hooks/useMockAudioDetection.ts RealGuitarHero/__tests__/utils/mockAudio.test.ts
+git add GuitarSlam/src/utils/mockAudio.ts GuitarSlam/src/hooks/useMockAudioDetection.ts GuitarSlam/__tests__/utils/mockAudio.test.ts
 git commit -m "feat: add mock audio detection hook"
 ```
 
@@ -148,41 +152,51 @@ git commit -m "feat: add mock audio detection hook"
 ### Task 10: Build Freeplay Mode screen
 
 **Files:**
-- Modify: `RealGuitarHero/app/(tabs)/freeplay.tsx`
+
+- Modify: `GuitarSlam/app/(tabs)/freeplay.tsx`
 
 **Step 1: Update screen UI to use mock detection hook**
 
-Edit `RealGuitarHero/app/(tabs)/freeplay.tsx`:
+Edit `GuitarSlam/app/(tabs)/freeplay.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMockAudioDetection } from '../../src/hooks/useMockAudioDetection';
-import { colors, spacing, fontSize } from '../../src/constants/theme';
+import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useMockAudioDetection } from "../../src/hooks/useMockAudioDetection";
+import { colors, spacing, fontSize } from "../../src/constants/theme";
 
 export default function FreeplayScreen() {
-  const { isListening, currentChord, chordHistory, start, stop } = useMockAudioDetection();
+  const { isListening, currentChord, chordHistory, start, stop } =
+    useMockAudioDetection();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Freeplay Mode</Text>
-        <Text style={styles.subtitle}>Play any chord and see instant feedback</Text>
+        <Text style={styles.subtitle}>
+          Play any chord and see instant feedback
+        </Text>
       </View>
 
       <View style={styles.card}>
         <Text style={styles.label}>Detected Chord</Text>
-        <Text style={styles.chordName}>{currentChord?.name ?? '—'}</Text>
+        <Text style={styles.chordName}>{currentChord?.name ?? "—"}</Text>
         <Text style={styles.confidence}>
-          Confidence: {currentChord ? `${Math.round(currentChord.confidence * 100)}%` : '—'}
+          Confidence:{" "}
+          {currentChord ? `${Math.round(currentChord.confidence * 100)}%` : "—"}
         </Text>
       </View>
 
       <Pressable
         onPress={isListening ? stop : start}
-        style={[styles.button, isListening ? styles.buttonStop : styles.buttonStart]}
+        style={[
+          styles.button,
+          isListening ? styles.buttonStop : styles.buttonStart,
+        ]}
       >
-        <Text style={styles.buttonText}>{isListening ? 'Stop Listening' : 'Start Listening'}</Text>
+        <Text style={styles.buttonText}>
+          {isListening ? "Stop Listening" : "Start Listening"}
+        </Text>
       </Pressable>
 
       <View style={styles.history}>
@@ -193,7 +207,7 @@ export default function FreeplayScreen() {
           renderItem={({ item }) => (
             <View style={styles.historyItem}>
               <Text style={styles.historyChord}>{item.name}</Text>
-              <Text style={styles.historyNotes}>{item.notes.join('-')}</Text>
+              <Text style={styles.historyNotes}>{item.notes.join("-")}</Text>
             </View>
           )}
         />
@@ -213,7 +227,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSize.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: colors.text,
   },
   subtitle: {
@@ -234,7 +248,7 @@ const styles = StyleSheet.create({
   chordName: {
     color: colors.text,
     fontSize: fontSize.huge,
-    fontWeight: '800',
+    fontWeight: "800",
     marginVertical: spacing.sm,
   },
   confidence: {
@@ -244,7 +258,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: spacing.md,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: spacing.lg,
   },
   buttonStart: {
@@ -255,7 +269,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.text,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   history: {
     flex: 1,
@@ -263,7 +277,7 @@ const styles = StyleSheet.create({
   historyTitle: {
     color: colors.text,
     fontSize: fontSize.md,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: spacing.sm,
   },
   historyItem: {
@@ -274,7 +288,7 @@ const styles = StyleSheet.create({
   historyChord: {
     color: colors.text,
     fontSize: fontSize.md,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   historyNotes: {
     color: colors.textSecondary,
@@ -291,7 +305,7 @@ Expected: Freeplay screen shows current chord + history when Start Listening is 
 **Step 3: Commit**
 
 ```bash
-git add RealGuitarHero/app/(tabs)/freeplay.tsx
+git add GuitarSlam/app/(tabs)/freeplay.tsx
 git commit -m "feat: build freeplay mode screen"
 ```
 
@@ -300,18 +314,19 @@ git commit -m "feat: build freeplay mode screen"
 ### Task 11: Create sample songs data
 
 **Files:**
-- Create: `RealGuitarHero/src/constants/songs.ts`
-- Test: `RealGuitarHero/__tests__/constants/songs.test.ts`
+
+- Create: `GuitarSlam/src/constants/songs.ts`
+- Test: `GuitarSlam/__tests__/constants/songs.test.ts`
 
 **Step 1: Write the failing test**
 
-Create `RealGuitarHero/__tests__/constants/songs.test.ts`:
+Create `GuitarSlam/__tests__/constants/songs.test.ts`:
 
 ```ts
-import { sampleSongs } from '../../src/constants/songs';
+import { sampleSongs } from "../../src/constants/songs";
 
-describe('sampleSongs', () => {
-  it('includes at least 3 songs with charts', () => {
+describe("sampleSongs", () => {
+  it("includes at least 3 songs with charts", () => {
     expect(sampleSongs.length).toBeGreaterThanOrEqual(3);
     sampleSongs.forEach((song) => {
       expect(song.levels.length).toBeGreaterThan(0);
@@ -321,7 +336,7 @@ describe('sampleSongs', () => {
     });
   });
 
-  it('has non-decreasing time order per chart', () => {
+  it("has non-decreasing time order per chart", () => {
     sampleSongs.forEach((song) => {
       song.levels.forEach((level) => {
         const times = level.chart.map((note) => note.time);
@@ -340,73 +355,73 @@ Expected: FAIL with "Cannot find module '../constants/songs'"
 
 **Step 3: Write minimal implementation**
 
-Create `RealGuitarHero/src/constants/songs.ts`:
+Create `GuitarSlam/src/constants/songs.ts`:
 
 ```ts
-import { Song } from '../types';
+import { Song } from "../types";
 
 export const sampleSongs: Song[] = [
   {
-    id: 'song-1',
-    title: 'Chord Parade',
-    artist: 'Practice Crew',
+    id: "song-1",
+    title: "Chord Parade",
+    artist: "Practice Crew",
     difficulty: 2,
     bpm: 90,
     levels: [
       {
         levelNumber: 1,
-        name: 'Warmup',
-        description: 'Open chords at an easy tempo',
+        name: "Warmup",
+        description: "Open chords at an easy tempo",
         chart: [
-          { id: 's1-n1', chord: 'C', time: 1.0, duration: 1.5 },
-          { id: 's1-n2', chord: 'G', time: 3.0, duration: 1.5 },
-          { id: 's1-n3', chord: 'Am', time: 5.0, duration: 1.5 },
-          { id: 's1-n4', chord: 'F', time: 7.0, duration: 1.5 },
-          { id: 's1-n5', chord: 'C', time: 9.0, duration: 1.5 },
-          { id: 's1-n6', chord: 'G', time: 11.0, duration: 1.5 },
+          { id: "s1-n1", chord: "C", time: 1.0, duration: 1.5 },
+          { id: "s1-n2", chord: "G", time: 3.0, duration: 1.5 },
+          { id: "s1-n3", chord: "Am", time: 5.0, duration: 1.5 },
+          { id: "s1-n4", chord: "F", time: 7.0, duration: 1.5 },
+          { id: "s1-n5", chord: "C", time: 9.0, duration: 1.5 },
+          { id: "s1-n6", chord: "G", time: 11.0, duration: 1.5 },
         ],
       },
     ],
   },
   {
-    id: 'song-2',
-    title: 'Midnight Strum',
-    artist: 'Open Strings',
+    id: "song-2",
+    title: "Midnight Strum",
+    artist: "Open Strings",
     difficulty: 3,
     bpm: 110,
     levels: [
       {
         levelNumber: 1,
-        name: 'Moonlight',
-        description: 'Smooth changes with steady timing',
+        name: "Moonlight",
+        description: "Smooth changes with steady timing",
         chart: [
-          { id: 's2-n1', chord: 'Em', time: 1.0, duration: 1.0 },
-          { id: 's2-n2', chord: 'G', time: 2.5, duration: 1.0 },
-          { id: 's2-n3', chord: 'D', time: 4.0, duration: 1.0 },
-          { id: 's2-n4', chord: 'C', time: 5.5, duration: 1.0 },
-          { id: 's2-n5', chord: 'Em', time: 7.0, duration: 1.0 },
-          { id: 's2-n6', chord: 'G', time: 8.5, duration: 1.0 },
-          { id: 's2-n7', chord: 'D', time: 10.0, duration: 1.0 },
+          { id: "s2-n1", chord: "Em", time: 1.0, duration: 1.0 },
+          { id: "s2-n2", chord: "G", time: 2.5, duration: 1.0 },
+          { id: "s2-n3", chord: "D", time: 4.0, duration: 1.0 },
+          { id: "s2-n4", chord: "C", time: 5.5, duration: 1.0 },
+          { id: "s2-n5", chord: "Em", time: 7.0, duration: 1.0 },
+          { id: "s2-n6", chord: "G", time: 8.5, duration: 1.0 },
+          { id: "s2-n7", chord: "D", time: 10.0, duration: 1.0 },
         ],
       },
     ],
   },
   {
-    id: 'song-3',
-    title: 'Campfire Loop',
-    artist: 'Strum Circle',
+    id: "song-3",
+    title: "Campfire Loop",
+    artist: "Strum Circle",
     difficulty: 1,
     bpm: 80,
     levels: [
       {
         levelNumber: 1,
-        name: 'Easy Loop',
-        description: 'Slow and steady practice',
+        name: "Easy Loop",
+        description: "Slow and steady practice",
         chart: [
-          { id: 's3-n1', chord: 'A', time: 1.0, duration: 2.0 },
-          { id: 's3-n2', chord: 'D', time: 4.0, duration: 2.0 },
-          { id: 's3-n3', chord: 'E', time: 7.0, duration: 2.0 },
-          { id: 's3-n4', chord: 'A', time: 10.0, duration: 2.0 },
+          { id: "s3-n1", chord: "A", time: 1.0, duration: 2.0 },
+          { id: "s3-n2", chord: "D", time: 4.0, duration: 2.0 },
+          { id: "s3-n3", chord: "E", time: 7.0, duration: 2.0 },
+          { id: "s3-n4", chord: "A", time: 10.0, duration: 2.0 },
         ],
       },
     ],
@@ -422,7 +437,7 @@ Expected: PASS
 **Step 5: Commit**
 
 ```bash
-git add RealGuitarHero/src/constants/songs.ts RealGuitarHero/__tests__/constants/songs.test.ts
+git add GuitarSlam/src/constants/songs.ts GuitarSlam/__tests__/constants/songs.test.ts
 git commit -m "feat: add sample songs data"
 ```
 
@@ -431,26 +446,29 @@ git commit -m "feat: add sample songs data"
 ### Task 12: Build Game Mode screen with falling notes
 
 **Files:**
-- Create: `RealGuitarHero/src/components/FallingNote.tsx`
-- Modify: `RealGuitarHero/app/(tabs)/game.tsx`
+
+- Create: `GuitarSlam/src/components/FallingNote.tsx`
+- Modify: `GuitarSlam/app/(tabs)/game.tsx`
 
 **Step 1: Create falling note component**
 
-Create `RealGuitarHero/src/components/FallingNote.tsx`:
+Create `GuitarSlam/src/components/FallingNote.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, fontSize, borderRadius } from '../constants/theme';
+import { View, Text, StyleSheet } from "react-native";
+import { colors, spacing, fontSize, borderRadius } from "../constants/theme";
 
 interface FallingNoteProps {
   label: string;
   y: number;
-  status: 'upcoming' | 'hit' | 'miss';
+  status: "upcoming" | "hit" | "miss";
 }
 
 export default function FallingNote({ label, y, status }: FallingNoteProps) {
   return (
-    <View style={[styles.note, { transform: [{ translateY: y }] }, styles[status]]}>
+    <View
+      style={[styles.note, { transform: [{ translateY: y }] }, styles[status]]}
+    >
       <Text style={styles.noteText}>{label}</Text>
     </View>
   );
@@ -458,17 +476,17 @@ export default function FallingNote({ label, y, status }: FallingNoteProps) {
 
 const styles = StyleSheet.create({
   note: {
-    position: 'absolute',
+    position: "absolute",
     left: spacing.lg,
     right: spacing.lg,
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.md,
-    alignItems: 'center',
+    alignItems: "center",
   },
   noteText: {
     color: colors.text,
     fontSize: fontSize.md,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   upcoming: {
     backgroundColor: colors.backgroundLight,
@@ -484,30 +502,42 @@ const styles = StyleSheet.create({
 
 **Step 2: Add simple falling-note loop**
 
-Edit `RealGuitarHero/app/(tabs)/game.tsx`:
+Edit `GuitarSlam/app/(tabs)/game.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import FallingNote from '../../src/components/FallingNote';
-import { sampleSongs } from '../../src/constants/songs';
-import { colors, spacing, fontSize } from '../../src/constants/theme';
-import { useGameStore } from '../../src/stores/useGameStore';
+import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect, useMemo, useRef, useState } from "react";
+import FallingNote from "../../src/components/FallingNote";
+import { sampleSongs } from "../../src/constants/songs";
+import { colors, spacing, fontSize } from "../../src/constants/theme";
+import { useGameStore } from "../../src/stores/useGameStore";
 
 const TRAVEL_TIME = 3.5; // seconds from spawn to hit zone
 const HIT_WINDOW = 0.25; // seconds around target time
 
 export default function GameScreen() {
-  const { setSong, setLevel, startGame, endGame, isPlaying, score, combo, hits, misses } = useGameStore();
+  const {
+    setSong,
+    setLevel,
+    startGame,
+    endGame,
+    isPlaying,
+    score,
+    combo,
+    hits,
+    misses,
+  } = useGameStore();
   const [currentTime, setCurrentTime] = useState(0);
-  const [noteStatus, setNoteStatus] = useState<Record<string, 'upcoming' | 'hit' | 'miss'>>({});
+  const [noteStatus, setNoteStatus] = useState<
+    Record<string, "upcoming" | "hit" | "miss">
+  >({});
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
 
   const song = sampleSongs[0];
   const level = song.levels[0];
-  const screenHeight = Dimensions.get('window').height;
+  const screenHeight = Dimensions.get("window").height;
   const hitZoneY = screenHeight * 0.75;
 
   useEffect(() => {
@@ -529,7 +559,8 @@ export default function GameScreen() {
     startTimeRef.current = Date.now();
 
     const loop = () => {
-      const elapsed = (Date.now() - (startTimeRef.current ?? Date.now())) / 1000;
+      const elapsed =
+        (Date.now() - (startTimeRef.current ?? Date.now())) / 1000;
       setCurrentTime(elapsed);
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -558,13 +589,17 @@ export default function GameScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Game Mode</Text>
-        <Text style={styles.subtitle}>{song.title} · Level {level.levelNumber}</Text>
+        <Text style={styles.subtitle}>
+          {song.title} · Level {level.levelNumber}
+        </Text>
       </View>
 
       <View style={styles.scoreRow}>
         <Text style={styles.score}>Score {score}</Text>
         <Text style={styles.combo}>Combo {combo}</Text>
-        <Text style={styles.stats}>H {hits} / M {misses}</Text>
+        <Text style={styles.stats}>
+          H {hits} / M {misses}
+        </Text>
       </View>
 
       <View style={styles.playfield}>
@@ -576,19 +611,29 @@ export default function GameScreen() {
           const timeUntil = note.time - currentTime;
           const progress = 1 - timeUntil / TRAVEL_TIME;
           const y = Math.max(-100, Math.min(hitZoneY, progress * hitZoneY));
-          const status = noteStatus[note.id] ?? 'upcoming';
+          const status = noteStatus[note.id] ?? "upcoming";
 
-          if (timeUntil < -HIT_WINDOW && status === 'upcoming') {
-            setNoteStatus((prev) => ({ ...prev, [note.id]: 'miss' }));
+          if (timeUntil < -HIT_WINDOW && status === "upcoming") {
+            setNoteStatus((prev) => ({ ...prev, [note.id]: "miss" }));
           }
 
-          return <FallingNote key={note.id} label={note.chord} y={y} status={status} />;
+          return (
+            <FallingNote
+              key={note.id}
+              label={note.chord}
+              y={y}
+              status={status}
+            />
+          );
         })}
       </View>
 
       <View style={styles.controls}>
-        <Pressable onPress={isPlaying ? handleStop : handleStart} style={styles.button}>
-          <Text style={styles.buttonText}>{isPlaying ? 'Stop' : 'Start'}</Text>
+        <Pressable
+          onPress={isPlaying ? handleStop : handleStart}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>{isPlaying ? "Stop" : "Start"}</Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -607,7 +652,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSize.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: colors.text,
   },
   subtitle: {
@@ -616,17 +661,17 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   scoreRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginVertical: spacing.sm,
   },
   score: {
     color: colors.text,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   combo: {
     color: colors.good,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   stats: {
     color: colors.textSecondary,
@@ -636,18 +681,18 @@ const styles = StyleSheet.create({
     marginVertical: spacing.md,
     backgroundColor: colors.backgroundDark,
     borderRadius: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   hitZone: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     height: 40,
     borderTopWidth: 2,
     borderBottomWidth: 2,
     borderColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   hitZoneText: {
     color: colors.primary,
@@ -661,11 +706,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 12,
     paddingVertical: spacing.md,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
     color: colors.text,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
 ```
@@ -678,7 +723,7 @@ Expected: Falling notes animate down the playfield and hit zone is visible.
 **Step 4: Commit**
 
 ```bash
-git add RealGuitarHero/app/(tabs)/game.tsx RealGuitarHero/src/components/FallingNote.tsx
+git add GuitarSlam/app/(tabs)/game.tsx GuitarSlam/src/components/FallingNote.tsx
 git commit -m "feat: add falling notes game screen"
 ```
 
@@ -687,15 +732,16 @@ git commit -m "feat: add falling notes game screen"
 ### Task 13: Implement hit detection and scoring UI
 
 **Files:**
-- Modify: `RealGuitarHero/app/(tabs)/game.tsx`
+
+- Modify: `GuitarSlam/app/(tabs)/game.tsx`
 
 **Step 1: Add hit detection against mock audio**
 
-Edit `RealGuitarHero/app/(tabs)/game.tsx` (extend the existing implementation):
+Edit `GuitarSlam/app/(tabs)/game.tsx` (extend the existing implementation):
 
 ```tsx
-import { useAudioStore } from '../../src/stores/useAudioStore';
-import { useMockAudioDetection } from '../../src/hooks/useMockAudioDetection';
+import { useAudioStore } from "../../src/stores/useAudioStore";
+import { useMockAudioDetection } from "../../src/hooks/useMockAudioDetection";
 
 const PERFECT_WINDOW = 0.1;
 
@@ -706,15 +752,15 @@ useMockAudioDetection();
 // inside map/render loop, replace miss-only logic with detection
 const inWindow = Math.abs(timeUntil) <= HIT_WINDOW;
 const isPerfect = Math.abs(timeUntil) <= PERFECT_WINDOW;
-const alreadyResolved = status !== 'upcoming';
+const alreadyResolved = status !== "upcoming";
 
 if (inWindow && !alreadyResolved && currentChord?.name === note.chord) {
-  setNoteStatus((prev) => ({ ...prev, [note.id]: 'hit' }));
-  addHit(isPerfect ? 'perfect' : 'good');
+  setNoteStatus((prev) => ({ ...prev, [note.id]: "hit" }));
+  addHit(isPerfect ? "perfect" : "good");
 }
 
-if (timeUntil < -HIT_WINDOW && status === 'upcoming') {
-  setNoteStatus((prev) => ({ ...prev, [note.id]: 'miss' }));
+if (timeUntil < -HIT_WINDOW && status === "upcoming") {
+  setNoteStatus((prev) => ({ ...prev, [note.id]: "miss" }));
   addMiss();
 }
 ```
@@ -724,20 +770,24 @@ if (timeUntil < -HIT_WINDOW && status === 'upcoming') {
 Add a `lastHit` state to display "Perfect!" or "Good!" near the hit zone:
 
 ```tsx
-const [lastHit, setLastHit] = useState<'perfect' | 'good' | 'miss' | null>(null);
+const [lastHit, setLastHit] = useState<"perfect" | "good" | "miss" | null>(
+  null,
+);
 
 // when hit
-setLastHit(isPerfect ? 'perfect' : 'good');
+setLastHit(isPerfect ? "perfect" : "good");
 
 // when miss
-setLastHit('miss');
+setLastHit("miss");
 
 // in render
-{lastHit && (
-  <View style={styles.hitToast}>
-    <Text style={styles.hitToastText}>{lastHit.toUpperCase()}</Text>
-  </View>
-)}
+{
+  lastHit && (
+    <View style={styles.hitToast}>
+      <Text style={styles.hitToastText}>{lastHit.toUpperCase()}</Text>
+    </View>
+  );
+}
 ```
 
 **Step 3: Manual check**
@@ -748,7 +798,7 @@ Expected: When mock chords match notes in the hit window, score/combo increase a
 **Step 4: Commit**
 
 ```bash
-git add RealGuitarHero/app/(tabs)/game.tsx
+git add GuitarSlam/app/(tabs)/game.tsx
 git commit -m "feat: add hit detection and scoring UI"
 ```
 
@@ -757,22 +807,35 @@ git commit -m "feat: add hit detection and scoring UI"
 ### Task 14: Add Home screen with navigation cards
 
 **Files:**
-- Modify: `RealGuitarHero/app/(tabs)/index.tsx`
+
+- Modify: `GuitarSlam/app/(tabs)/index.tsx`
 
 **Step 1: Build navigation cards**
 
-Edit `RealGuitarHero/app/(tabs)/index.tsx`:
+Edit `GuitarSlam/app/(tabs)/index.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { colors, spacing, fontSize } from '../../src/constants/theme';
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { colors, spacing, fontSize } from "../../src/constants/theme";
 
 const cards = [
-  { title: 'Freeplay', description: 'Practice chords with real-time feedback', route: '/(tabs)/freeplay' },
-  { title: 'Game Mode', description: 'Play along with falling notes', route: '/(tabs)/game' },
-  { title: 'Library', description: 'Browse chord diagrams', route: '/(tabs)/library' },
+  {
+    title: "Freeplay",
+    description: "Practice chords with real-time feedback",
+    route: "/(tabs)/freeplay",
+  },
+  {
+    title: "Game Mode",
+    description: "Play along with falling notes",
+    route: "/(tabs)/game",
+  },
+  {
+    title: "Library",
+    description: "Browse chord diagrams",
+    route: "/(tabs)/library",
+  },
 ];
 
 export default function HomeScreen() {
@@ -786,7 +849,11 @@ export default function HomeScreen() {
       </View>
 
       {cards.map((card) => (
-        <Pressable key={card.title} style={styles.card} onPress={() => router.push(card.route)}>
+        <Pressable
+          key={card.title}
+          style={styles.card}
+          onPress={() => router.push(card.route)}
+        >
           <Text style={styles.cardTitle}>{card.title}</Text>
           <Text style={styles.cardDescription}>{card.description}</Text>
         </Pressable>
@@ -806,7 +873,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSize.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: colors.text,
   },
   subtitle: {
@@ -822,7 +889,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     color: colors.text,
-    fontWeight: '700',
+    fontWeight: "700",
     fontSize: fontSize.lg,
   },
   cardDescription: {
@@ -840,7 +907,7 @@ Expected: Home screen shows 3 tappable cards that navigate to each tab.
 **Step 3: Commit**
 
 ```bash
-git add RealGuitarHero/app/(tabs)/index.tsx
+git add GuitarSlam/app/(tabs)/index.tsx
 git commit -m "feat: add home navigation cards"
 ```
 
@@ -849,13 +916,14 @@ git commit -m "feat: add home navigation cards"
 ### Task 15: Native audio module placeholder (iOS/Android)
 
 **Files:**
-- Create: `RealGuitarHero/modules/audio-detection/README.md`
-- Create: `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.swift`
-- Create: `RealGuitarHero/modules/audio-detection/android/src/main/java/com/realguitarhero/audiodetection/AudioDetectionModule.kt`
+
+- Create: `GuitarSlam/modules/audio-detection/README.md`
+- Create: `GuitarSlam/modules/audio-detection/ios/AudioDetectionModule.swift`
+- Create: `GuitarSlam/modules/audio-detection/android/src/main/java/com/GuitarSlam/audiodetection/AudioDetectionModule.kt`
 
 **Step 1: Add placeholder README**
 
-Create `RealGuitarHero/modules/audio-detection/README.md`:
+Create `GuitarSlam/modules/audio-detection/README.md`:
 
 ```md
 # Audio Detection Module (Placeholder)
@@ -870,7 +938,7 @@ TODO: Implement audio capture + pitch detection and wire to JS.
 
 **Step 2: Add iOS placeholder**
 
-Create `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.swift`:
+Create `GuitarSlam/modules/audio-detection/ios/AudioDetectionModule.swift`:
 
 ```swift
 import Foundation
@@ -891,10 +959,10 @@ class AudioDetectionModule: NSObject {
 
 **Step 3: Add Android placeholder**
 
-Create `RealGuitarHero/modules/audio-detection/android/src/main/java/com/realguitarhero/audiodetection/AudioDetectionModule.kt`:
+Create `GuitarSlam/modules/audio-detection/android/src/main/java/com/GuitarSlam/audiodetection/AudioDetectionModule.kt`:
 
 ```kotlin
-package com.realguitarhero.audiodetection
+package com.GuitarSlam.audiodetection
 
 class AudioDetectionModule {
   fun start() {
@@ -915,6 +983,6 @@ Expected: App still runs; native placeholders are not referenced yet.
 **Step 5: Commit**
 
 ```bash
-git add RealGuitarHero/modules/audio-detection
+git add GuitarSlam/modules/audio-detection
 git commit -m "chore: add native audio module placeholders"
 ```

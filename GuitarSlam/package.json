@@ -1,5 +1,5 @@
 {
-  "name": "realguitarhero",
+  "name": "guitarslam",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -26,6 +26,7 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.28.6",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.12",

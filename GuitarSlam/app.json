@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Real Guitar Hero",
-    "slug": "real-guitar-hero",
+    "slug": "guitar-slam",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,14 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#1a1a2e"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.realguitarhero.app",
+      "bundleIdentifier": "com.guitarslam.app",
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "Real Guitar Hero needs microphone access to detect the chords you play on your guitar.",
+        "NSMicrophoneUsageDescription": "Guitar Slam needs microphone access to detect the chords you play on your guitar.",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -27,18 +25,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1a1a2e"
       },
-      "package": "com.realguitarhero.app",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "package": "com.guitarslam.app",
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "realguitarhero",
-    "plugins": [
-      "expo-router"
-    ],
+    "scheme": "guitarslam",
+    "plugins": ["expo-router"],
     "extra": {
       "router": {},
       "eas": {

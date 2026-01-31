@@ -15,39 +15,43 @@
 Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/utils/chordMatching.test.ts`.
 
 **Files:**
-- Modify: `RealGuitarHero/src/types/index.ts`
-- Create: `RealGuitarHero/src/utils/chordMatching.ts`
-- Test: `RealGuitarHero/__tests__/utils/chordMatching.test.ts`
+
+- Modify: `GuitarSlam/src/types/index.ts`
+- Create: `GuitarSlam/src/utils/chordMatching.ts`
+- Test: `GuitarSlam/__tests__/utils/chordMatching.test.ts`
 
 **Step 1: Write the failing tests**
 
-Create `RealGuitarHero/__tests__/utils/chordMatching.test.ts`:
+Create `GuitarSlam/__tests__/utils/chordMatching.test.ts`:
 
 ```ts
-import { matchChordFromNotes, normalizePitchClass } from '../../src/utils/chordMatching';
-import { chords } from '../../src/constants/chords';
+import {
+  matchChordFromNotes,
+  normalizePitchClass,
+} from "../../src/utils/chordMatching";
+import { chords } from "../../src/constants/chords";
 
-describe('normalizePitchClass', () => {
-  it('normalizes sharps and flats to canonical pitch classes', () => {
-    expect(normalizePitchClass('Bb')).toBe('A#');
-    expect(normalizePitchClass('Db')).toBe('C#');
-    expect(normalizePitchClass('F#')).toBe('F#');
+describe("normalizePitchClass", () => {
+  it("normalizes sharps and flats to canonical pitch classes", () => {
+    expect(normalizePitchClass("Bb")).toBe("A#");
+    expect(normalizePitchClass("Db")).toBe("C#");
+    expect(normalizePitchClass("F#")).toBe("F#");
   });
 });
 
-describe('matchChordFromNotes', () => {
-  it('matches a chord from a detected note set', () => {
-    const result = matchChordFromNotes(['G', 'B', 'D'], chords);
-    expect(result?.primaryName).toBe('G');
+describe("matchChordFromNotes", () => {
+  it("matches a chord from a detected note set", () => {
+    const result = matchChordFromNotes(["G", "B", "D"], chords);
+    expect(result?.primaryName).toBe("G");
   });
 
-  it('handles extra notes by using a threshold overlap score', () => {
-    const result = matchChordFromNotes(['G', 'B', 'D', 'A'], chords);
-    expect(result?.primaryName).toBe('G');
+  it("handles extra notes by using a threshold overlap score", () => {
+    const result = matchChordFromNotes(["G", "B", "D", "A"], chords);
+    expect(result?.primaryName).toBe("G");
   });
 
-  it('returns null when confidence is too low', () => {
-    const result = matchChordFromNotes(['C#', 'F#'], chords, 0.75);
+  it("returns null when confidence is too low", () => {
+    const result = matchChordFromNotes(["C#", "F#"], chords, 0.75);
     expect(result).toBeNull();
   });
 });
@@ -60,7 +64,7 @@ Expected: FAIL with "Cannot find module '../utils/chordMatching'"
 
 **Step 3: Add types for detected pitches and chord matches**
 
-Modify `RealGuitarHero/src/types/index.ts`:
+Modify `GuitarSlam/src/types/index.ts`:
 
 ```ts
 export interface DetectedPitch {
@@ -78,17 +82,17 @@ export interface DetectedChordMatch {
 
 **Step 4: Implement chord matching utilities**
 
-Create `RealGuitarHero/src/utils/chordMatching.ts`:
+Create `GuitarSlam/src/utils/chordMatching.ts`:
 
 ```ts
-import { Chord } from '../types';
+import { Chord } from "../types";
 
 const FLAT_TO_SHARP: Record<string, string> = {
-  Ab: 'G#',
-  Bb: 'A#',
-  Db: 'C#',
-  Eb: 'D#',
-  Gb: 'F#',
+  Ab: "G#",
+  Bb: "A#",
+  Db: "C#",
+  Eb: "D#",
+  Gb: "F#",
 };
 
 export const normalizePitchClass = (note: string): string => {
@@ -138,7 +142,7 @@ Expected: PASS
 **Step 6: Commit**
 
 ```bash
-git add RealGuitarHero/src/types/index.ts RealGuitarHero/src/utils/chordMatching.ts RealGuitarHero/__tests__/utils/chordMatching.test.ts
+git add GuitarSlam/src/types/index.ts GuitarSlam/src/utils/chordMatching.ts GuitarSlam/__tests__/utils/chordMatching.test.ts
 git commit -m "feat: add chord matching utilities"
 ```
 
@@ -149,22 +153,23 @@ git commit -m "feat: add chord matching utilities"
 Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/constants/chords.test.ts`.
 
 **Files:**
-- Modify: `RealGuitarHero/src/constants/chords.ts`
-- Test: `RealGuitarHero/__tests__/constants/chords.test.ts`
+
+- Modify: `GuitarSlam/src/constants/chords.ts`
+- Test: `GuitarSlam/__tests__/constants/chords.test.ts`
 
 **Step 1: Write the failing test**
 
-Create `RealGuitarHero/__tests__/constants/chords.test.ts`:
+Create `GuitarSlam/__tests__/constants/chords.test.ts`:
 
 ```ts
-import { chords } from '../../src/constants/chords';
+import { chords } from "../../src/constants/chords";
 
-describe('chords database', () => {
-  it('contains at least 100 chords', () => {
+describe("chords database", () => {
+  it("contains at least 100 chords", () => {
     expect(chords.length).toBeGreaterThanOrEqual(100);
   });
 
-  it('contains unique ids', () => {
+  it("contains unique ids", () => {
     const ids = new Set(chords.map((chord) => chord.id));
     expect(ids.size).toBe(chords.length);
   });
@@ -178,7 +183,8 @@ Expected: FAIL with "Expected: >= 100"
 
 **Step 3: Expand chord data**
 
-Update `RealGuitarHero/src/constants/chords.ts` to include 100+ entries across:
+Update `GuitarSlam/src/constants/chords.ts` to include 100+ entries across:
+
 - Major/minor (12 each)
 - Dominant/major/minor 7ths
 - Sus2/sus4
@@ -216,7 +222,7 @@ Expected: PASS
 **Step 5: Commit**
 
 ```bash
-git add RealGuitarHero/src/constants/chords.ts RealGuitarHero/__tests__/constants/chords.test.ts
+git add GuitarSlam/src/constants/chords.ts GuitarSlam/__tests__/constants/chords.test.ts
 git commit -m "feat: expand chord database to 100+ entries"
 ```
 
@@ -227,24 +233,29 @@ git commit -m "feat: expand chord database to 100+ entries"
 Status (2026-01-30): Implemented (JS bridge + iOS files). Tests PASS: `pnpm test -- __tests__/modules/audioDetection.test.ts`.
 
 **Files:**
-- Create: `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.swift`
-- Create: `RealGuitarHero/modules/audio-detection/ios/CQTProcessor.swift`
-- Create: `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.podspec`
-- Create: `RealGuitarHero/modules/audio-detection/index.ts`
-- Modify: `RealGuitarHero/package.json`
+
+- Create: `GuitarSlam/modules/audio-detection/ios/AudioDetectionModule.swift`
+- Create: `GuitarSlam/modules/audio-detection/ios/CQTProcessor.swift`
+- Create: `GuitarSlam/modules/audio-detection/ios/AudioDetectionModule.podspec`
+- Create: `GuitarSlam/modules/audio-detection/index.ts`
+- Modify: `GuitarSlam/package.json`
 
 **Step 1: Write the failing JS bridge test**
 
-Create `RealGuitarHero/__tests__/modules/audioDetection.test.ts`:
+Create `GuitarSlam/__tests__/modules/audioDetection.test.ts`:
 
 ```ts
-import { startListening, stopListening, addListener } from '../../modules/audio-detection';
+import {
+  startListening,
+  stopListening,
+  addListener,
+} from "../../modules/audio-detection";
 
-describe('audio detection module bridge', () => {
-  it('exposes start/stop functions', () => {
-    expect(typeof startListening).toBe('function');
-    expect(typeof stopListening).toBe('function');
-    expect(typeof addListener).toBe('function');
+describe("audio detection module bridge", () => {
+  it("exposes start/stop functions", () => {
+    expect(typeof startListening).toBe("function");
+    expect(typeof stopListening).toBe("function");
+    expect(typeof addListener).toBe("function");
   });
 });
 ```
@@ -256,10 +267,14 @@ Expected: FAIL with "Cannot find module '../../modules/audio-detection'"
 
 **Step 3: Add JS module entry**
 
-Create `RealGuitarHero/modules/audio-detection/index.ts`:
+Create `GuitarSlam/modules/audio-detection/index.ts`:
 
 ```ts
-import { EventEmitter, NativeModulesProxy, Subscription } from 'expo-modules-core';
+import {
+  EventEmitter,
+  NativeModulesProxy,
+  Subscription,
+} from "expo-modules-core";
 
 const { AudioDetectionModule } = NativeModulesProxy;
 const emitter = new EventEmitter(AudioDetectionModule);
@@ -272,14 +287,16 @@ export type DetectedPitchEvent = {
 export const startListening = () => AudioDetectionModule.startListening();
 export const stopListening = () => AudioDetectionModule.stopListening();
 
-export const addListener = (listener: (event: DetectedPitchEvent) => void): Subscription => {
-  return emitter.addListener('onDetectedPitches', listener);
+export const addListener = (
+  listener: (event: DetectedPitchEvent) => void,
+): Subscription => {
+  return emitter.addListener("onDetectedPitches", listener);
 };
 ```
 
 **Step 4: Add iOS module scaffold**
 
-Create `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.swift`:
+Create `GuitarSlam/modules/audio-detection/ios/AudioDetectionModule.swift`:
 
 ```swift
 import ExpoModulesCore
@@ -329,7 +346,7 @@ public class AudioDetectionModule: Module {
 
 **Step 5: Add CQT processor implementation (iOS)**
 
-Create `RealGuitarHero/modules/audio-detection/ios/CQTProcessor.swift`:
+Create `GuitarSlam/modules/audio-detection/ios/CQTProcessor.swift`:
 
 ```swift
 import AVFoundation
@@ -416,7 +433,7 @@ final class CQTProcessor {
 
 **Step 6: Add podspec and package.json entry**
 
-Create `RealGuitarHero/modules/audio-detection/ios/AudioDetectionModule.podspec`:
+Create `GuitarSlam/modules/audio-detection/ios/AudioDetectionModule.podspec`:
 
 ```ruby
 Pod::Spec.new do |s|
@@ -430,7 +447,7 @@ Pod::Spec.new do |s|
 end
 ```
 
-Modify `RealGuitarHero/package.json` to include the module under `expo.modules` if needed by your Expo config.
+Modify `GuitarSlam/package.json` to include the module under `expo.modules` if needed by your Expo config.
 
 **Step 7: Run test to verify it passes**
 
@@ -440,7 +457,7 @@ Expected: PASS
 **Step 8: Commit**
 
 ```bash
-git add RealGuitarHero/modules/audio-detection RealGuitarHero/package.json RealGuitarHero/__tests__/modules/audioDetection.test.ts
+git add GuitarSlam/modules/audio-detection GuitarSlam/package.json GuitarSlam/__tests__/modules/audioDetection.test.ts
 git commit -m "feat: add iOS audio detection module scaffold"
 ```
 
@@ -451,16 +468,17 @@ git commit -m "feat: add iOS audio detection module scaffold"
 Status (2026-01-30): Implemented. Android app prebuild completed; JTransforms dependency added to module build.
 
 **Files:**
-- Create: `RealGuitarHero/modules/audio-detection/android/AudioDetectionModule.kt`
-- Modify: `RealGuitarHero/android/build.gradle` (after running `expo prebuild`)
-- Modify: `RealGuitarHero/modules/audio-detection/index.ts`
+
+- Create: `GuitarSlam/modules/audio-detection/android/AudioDetectionModule.kt`
+- Modify: `GuitarSlam/android/build.gradle` (after running `expo prebuild`)
+- Modify: `GuitarSlam/modules/audio-detection/index.ts`
 
 **Step 1: Add Android module implementation**
 
-Create `RealGuitarHero/modules/audio-detection/android/AudioDetectionModule.kt`:
+Create `GuitarSlam/modules/audio-detection/android/AudioDetectionModule.kt`:
 
 ```kotlin
-package com.realguitarhero.audiodetection
+package com.GuitarSlam.audiodetection
 
 import android.media.AudioRecord
 import android.media.MediaRecorder
@@ -568,9 +586,9 @@ Add `implementation 'com.github.wendykierp:JTransforms:3.1'` to the module/Andro
 **Step 3: Commit**
 
 ```bash
-git add RealGuitarHero/modules/audio-detection
+git add GuitarSlam/modules/audio-detection
 # Add android/ build config after prebuild
-# git add RealGuitarHero/android/build.gradle
+# git add GuitarSlam/android/build.gradle
 
 git commit -m "feat: add Android audio detection module scaffold"
 ```
@@ -582,23 +600,29 @@ git commit -m "feat: add Android audio detection module scaffold"
 Status (2026-01-30): Implemented (keeps FallingNote, adds native hook + env-based switch). Tests PASS: `pnpm test -- __tests__/stores/useAudioStore.test.ts`, `pnpm test -- __tests__/hooks/useAudioDetection.test.ts`.
 
 **Files:**
-- Modify: `RealGuitarHero/src/stores/useAudioStore.ts`
-- Modify: `RealGuitarHero/src/hooks/useMockAudioDetection.ts` (gate for dev)
-- Create: `RealGuitarHero/src/hooks/useAudioDetection.ts`
-- Modify: `RealGuitarHero/app/(tabs)/freeplay.tsx`
-- Test: `RealGuitarHero/__tests__/stores/useAudioStore.test.ts`
+
+- Modify: `GuitarSlam/src/stores/useAudioStore.ts`
+- Modify: `GuitarSlam/src/hooks/useMockAudioDetection.ts` (gate for dev)
+- Create: `GuitarSlam/src/hooks/useAudioDetection.ts`
+- Modify: `GuitarSlam/app/(tabs)/freeplay.tsx`
+- Test: `GuitarSlam/__tests__/stores/useAudioStore.test.ts`
 
 **Step 1: Write the failing store test**
 
-Create `RealGuitarHero/__tests__/stores/useAudioStore.test.ts`:
+Create `GuitarSlam/__tests__/stores/useAudioStore.test.ts`:
 
 ```ts
-import { act } from '@testing-library/react-native';
-import { useAudioStore } from '../../src/stores/useAudioStore';
+import { act } from "@testing-library/react-native";
+import { useAudioStore } from "../../src/stores/useAudioStore";
 
-describe('useAudioStore', () => {
-  it('sets current chord and adds to history', () => {
-    const chord = { name: 'G', confidence: 0.8, notes: ['G', 'B', 'D'], timestamp: 123 };
+describe("useAudioStore", () => {
+  it("sets current chord and adds to history", () => {
+    const chord = {
+      name: "G",
+      confidence: 0.8,
+      notes: ["G", "B", "D"],
+      timestamp: 123,
+    };
 
     act(() => {
       useAudioStore.getState().setCurrentChord(chord);
@@ -606,8 +630,8 @@ describe('useAudioStore', () => {
     });
 
     const state = useAudioStore.getState();
-    expect(state.currentChord?.name).toBe('G');
-    expect(state.chordHistory[0]?.name).toBe('G');
+    expect(state.currentChord?.name).toBe("G");
+    expect(state.chordHistory[0]?.name).toBe("G");
   });
 });
 ```
@@ -619,17 +643,22 @@ Expected: FAIL if missing actions or types
 
 **Step 3: Add a native detection hook**
 
-Create `RealGuitarHero/src/hooks/useAudioDetection.ts`:
+Create `GuitarSlam/src/hooks/useAudioDetection.ts`:
 
 ```ts
-import { useEffect, useMemo } from 'react';
-import { addListener, startListening, stopListening } from '../../modules/audio-detection';
-import { useAudioStore } from '../stores/useAudioStore';
-import { matchChordFromNotes } from '../utils/chordMatching';
-import { chords } from '../constants/chords';
+import { useEffect, useMemo } from "react";
+import {
+  addListener,
+  startListening,
+  stopListening,
+} from "../../modules/audio-detection";
+import { useAudioStore } from "../stores/useAudioStore";
+import { matchChordFromNotes } from "../utils/chordMatching";
+import { chords } from "../constants/chords";
 
 export const useAudioDetection = () => {
-  const { setListening, setCurrentChord, addToHistory, setError } = useAudioStore();
+  const { setListening, setCurrentChord, addToHistory, setError } =
+    useAudioStore();
 
   const subscription = useMemo(
     () =>
@@ -672,17 +701,19 @@ export const useAudioDetection = () => {
 
 **Step 4: Update Freeplay to use native detection (with dev fallback)**
 
-Modify `RealGuitarHero/app/(tabs)/freeplay.tsx` to pick hook based on an env flag:
+Modify `GuitarSlam/app/(tabs)/freeplay.tsx` to pick hook based on an env flag:
 
 ```ts
-import { useMockAudioDetection } from '../../src/hooks/useMockAudioDetection';
-import { useAudioDetection } from '../../src/hooks/useAudioDetection';
+import { useMockAudioDetection } from "../../src/hooks/useMockAudioDetection";
+import { useAudioDetection } from "../../src/hooks/useAudioDetection";
 
-const useDetectionHook = process.env.EXPO_PUBLIC_USE_MOCK_AUDIO === 'true'
-  ? useMockAudioDetection
-  : useAudioDetection;
+const useDetectionHook =
+  process.env.EXPO_PUBLIC_USE_MOCK_AUDIO === "true"
+    ? useMockAudioDetection
+    : useAudioDetection;
 
-const { isListening, currentChord, chordHistory, start, stop } = useDetectionHook();
+const { isListening, currentChord, chordHistory, start, stop } =
+  useDetectionHook();
 ```
 
 **Step 5: Run tests to verify they pass**
@@ -693,7 +724,7 @@ Expected: PASS
 **Step 6: Commit**
 
 ```bash
-git add RealGuitarHero/src/hooks/useAudioDetection.ts RealGuitarHero/src/stores/useAudioStore.ts RealGuitarHero/app/(tabs)/freeplay.tsx RealGuitarHero/__tests__/stores/useAudioStore.test.ts
+git add GuitarSlam/src/hooks/useAudioDetection.ts GuitarSlam/src/stores/useAudioStore.ts GuitarSlam/app/(tabs)/freeplay.tsx GuitarSlam/__tests__/stores/useAudioStore.test.ts
 
 git commit -m "feat: wire native audio detection into freeplay"
 ```
@@ -705,24 +736,25 @@ git commit -m "feat: wire native audio detection into freeplay"
 Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/constants/songs.test.ts`.
 
 **Files:**
-- Create: `RealGuitarHero/src/constants/songs.ts`
-- Modify: `RealGuitarHero/src/stores/useGameStore.ts`
-- Modify: `RealGuitarHero/app/(tabs)/game.tsx`
-- Test: `RealGuitarHero/__tests__/constants/songs.test.ts`
+
+- Create: `GuitarSlam/src/constants/songs.ts`
+- Modify: `GuitarSlam/src/stores/useGameStore.ts`
+- Modify: `GuitarSlam/app/(tabs)/game.tsx`
+- Test: `GuitarSlam/__tests__/constants/songs.test.ts`
 
 **Step 1: Write the failing test**
 
-Create `RealGuitarHero/__tests__/constants/songs.test.ts`:
+Create `GuitarSlam/__tests__/constants/songs.test.ts`:
 
 ```ts
-import { songs } from '../../src/constants/songs';
+import { songs } from "../../src/constants/songs";
 
-describe('songs data', () => {
-  it('contains at least 10 songs', () => {
+describe("songs data", () => {
+  it("contains at least 10 songs", () => {
     expect(songs.length).toBeGreaterThanOrEqual(10);
   });
 
-  it('each song has at least 2 levels', () => {
+  it("each song has at least 2 levels", () => {
     songs.forEach((song) => {
       expect(song.levels.length).toBeGreaterThanOrEqual(2);
     });
@@ -737,38 +769,38 @@ Expected: FAIL with "Cannot find module '../../src/constants/songs'"
 
 **Step 3: Add songs constant**
 
-Create `RealGuitarHero/src/constants/songs.ts` with at least 10 entries and multi-level charts. Example structure:
+Create `GuitarSlam/src/constants/songs.ts` with at least 10 entries and multi-level charts. Example structure:
 
 ```ts
-import { Song } from '../types';
+import { Song } from "../types";
 
 export const songs: Song[] = [
   {
-    id: 'greensleeves-trad',
-    title: 'Greensleeves',
-    artist: 'Traditional',
+    id: "greensleeves-trad",
+    title: "Greensleeves",
+    artist: "Traditional",
     difficulty: 2,
     bpm: 96,
     levels: [
       {
         levelNumber: 1,
-        name: 'Chord Basics',
-        description: 'Practice the core progression',
+        name: "Chord Basics",
+        description: "Practice the core progression",
         chart: [
-          { id: 'gs-1', time: 0, chord: 'Em', duration: 2 },
-          { id: 'gs-2', time: 2, chord: 'G', duration: 2 },
-          { id: 'gs-3', time: 4, chord: 'D', duration: 2 },
+          { id: "gs-1", time: 0, chord: "Em", duration: 2 },
+          { id: "gs-2", time: 2, chord: "G", duration: 2 },
+          { id: "gs-3", time: 4, chord: "D", duration: 2 },
         ],
       },
       {
         levelNumber: 2,
-        name: 'Full Song',
-        description: 'Full progression',
+        name: "Full Song",
+        description: "Full progression",
         chart: [
-          { id: 'gs-4', time: 0, chord: 'Em', duration: 2 },
-          { id: 'gs-5', time: 2, chord: 'G', duration: 2 },
-          { id: 'gs-6', time: 4, chord: 'D', duration: 2 },
-          { id: 'gs-7', time: 6, chord: 'C', duration: 2 },
+          { id: "gs-4", time: 0, chord: "Em", duration: 2 },
+          { id: "gs-5", time: 2, chord: "G", duration: 2 },
+          { id: "gs-6", time: 4, chord: "D", duration: 2 },
+          { id: "gs-7", time: 6, chord: "C", duration: 2 },
         ],
       },
     ],
@@ -780,7 +812,7 @@ Repeat for at least 10 songs. Use public domain or chord-only content.
 
 **Step 4: Add level navigation support**
 
-Modify `RealGuitarHero/src/stores/useGameStore.ts`:
+Modify `GuitarSlam/src/stores/useGameStore.ts`:
 
 ```ts
 setLevel: (level) => set({ currentLevel: level }),
@@ -796,7 +828,7 @@ Expected: PASS
 **Step 6: Commit**
 
 ```bash
-git add RealGuitarHero/src/constants/songs.ts RealGuitarHero/src/stores/useGameStore.ts RealGuitarHero/__tests__/constants/songs.test.ts
+git add GuitarSlam/src/constants/songs.ts GuitarSlam/src/stores/useGameStore.ts GuitarSlam/__tests__/constants/songs.test.ts
 
 git commit -m "feat: add song progression data"
 ```
@@ -808,24 +840,25 @@ git commit -m "feat: add song progression data"
 Status (2026-01-30): Implemented (keeps FallingNote via NoteLane + HitFeedback). Tests PASS: `pnpm test -- __tests__/components/NoteLane.test.tsx`, `pnpm test -- __tests__/components/HitFeedback.test.tsx`, `pnpm test -- __tests__/stores/useGameStore.test.ts`.
 
 **Files:**
-- Modify: `RealGuitarHero/app/(tabs)/game.tsx`
-- Create: `RealGuitarHero/src/components/NoteLane.tsx`
-- Create: `RealGuitarHero/src/components/HitFeedback.tsx`
-- Modify: `RealGuitarHero/src/stores/useGameStore.ts`
-- Test: `RealGuitarHero/__tests__/stores/useGameStore.test.ts`
+
+- Modify: `GuitarSlam/app/(tabs)/game.tsx`
+- Create: `GuitarSlam/src/components/NoteLane.tsx`
+- Create: `GuitarSlam/src/components/HitFeedback.tsx`
+- Modify: `GuitarSlam/src/stores/useGameStore.ts`
+- Test: `GuitarSlam/__tests__/stores/useGameStore.test.ts`
 
 **Step 1: Extend game store test**
 
-Update `RealGuitarHero/__tests__/stores/useGameStore.test.ts`:
+Update `GuitarSlam/__tests__/stores/useGameStore.test.ts`:
 
 ```ts
-import { useGameStore } from '../../src/stores/useGameStore';
+import { useGameStore } from "../../src/stores/useGameStore";
 
-describe('useGameStore scoring', () => {
-  it('applies combo multipliers correctly', () => {
+describe("useGameStore scoring", () => {
+  it("applies combo multipliers correctly", () => {
     useGameStore.getState().reset();
-    useGameStore.getState().addHit('perfect');
-    useGameStore.getState().addHit('perfect');
+    useGameStore.getState().addHit("perfect");
+    useGameStore.getState().addHit("perfect");
 
     const state = useGameStore.getState();
     expect(state.score).toBeGreaterThan(0);
@@ -835,11 +868,11 @@ describe('useGameStore scoring', () => {
 
 **Step 2: Implement note lane component**
 
-Create `RealGuitarHero/src/components/NoteLane.tsx`:
+Create `GuitarSlam/src/components/NoteLane.tsx`:
 
 ```tsx
-import { View, Text, StyleSheet } from 'react-native';
-import { ChordNote } from '../types';
+import { View, Text, StyleSheet } from "react-native";
+import { ChordNote } from "../types";
 
 interface NoteLaneProps {
   notes: ChordNote[];
@@ -852,7 +885,9 @@ export const NoteLane = ({ notes, currentTime }: NoteLaneProps) => {
       {notes.map((note) => {
         const offset = (note.time - currentTime) * 120; // pixels per second
         return (
-          <View key={note.id} style={[styles.note, { transform: [{ translateY: offset }] }]}
+          <View
+            key={note.id}
+            style={[styles.note, { transform: [{ translateY: offset }] }]}
           >
             <Text style={styles.noteText}>{note.chord}</Text>
           </View>
@@ -866,72 +901,75 @@ export const NoteLane = ({ notes, currentTime }: NoteLaneProps) => {
 const styles = StyleSheet.create({
   lane: {
     flex: 1,
-    position: 'relative',
-    backgroundColor: '#101018',
+    position: "relative",
+    backgroundColor: "#101018",
   },
   note: {
-    position: 'absolute',
+    position: "absolute",
     left: 24,
     right: 24,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#2d2d44',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#2d2d44",
+    justifyContent: "center",
+    alignItems: "center",
   },
   noteText: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
   },
   hitZone: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 40,
     left: 0,
     right: 0,
     height: 4,
-    backgroundColor: '#4ecdc4',
+    backgroundColor: "#4ecdc4",
   },
 });
 ```
 
 **Step 3: Implement hit feedback component**
 
-Create `RealGuitarHero/src/components/HitFeedback.tsx`:
+Create `GuitarSlam/src/components/HitFeedback.tsx`:
 
 ```tsx
-import { Text, StyleSheet, View } from 'react-native';
-import { HitType } from '../types';
+import { Text, StyleSheet, View } from "react-native";
+import { HitType } from "../types";
 
 const colors = {
-  perfect: '#2ecc71',
-  good: '#f1c40f',
-  miss: '#e74c3c',
+  perfect: "#2ecc71",
+  good: "#f1c40f",
+  miss: "#e74c3c",
 };
 
 export const HitFeedback = ({ type }: { type: HitType }) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.text, { color: colors[type] }]}>{type.toUpperCase()}</Text>
+      <Text style={[styles.text, { color: colors[type] }]}>
+        {type.toUpperCase()}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 80,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   text: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
 ```
 
 **Step 4: Wire Game screen to progression + scoring**
 
-Modify `RealGuitarHero/app/(tabs)/game.tsx` to:
+Modify `GuitarSlam/app/(tabs)/game.tsx` to:
+
 - Load songs list
 - Allow selection of a song and level
 - Start timer loop for note positions
@@ -946,7 +984,7 @@ Expected: PASS
 **Step 6: Commit**
 
 ```bash
-git add RealGuitarHero/app/(tabs)/game.tsx RealGuitarHero/src/components/NoteLane.tsx RealGuitarHero/src/components/HitFeedback.tsx RealGuitarHero/src/stores/useGameStore.ts RealGuitarHero/__tests__/stores/useGameStore.test.ts
+git add GuitarSlam/app/(tabs)/game.tsx GuitarSlam/src/components/NoteLane.tsx GuitarSlam/src/components/HitFeedback.tsx GuitarSlam/src/stores/useGameStore.ts GuitarSlam/__tests__/stores/useGameStore.test.ts
 
 git commit -m "feat: implement enhanced game mode UI"
 ```
@@ -958,16 +996,17 @@ git commit -m "feat: implement enhanced game mode UI"
 Status (2026-01-30): Implemented. Tests PASS: `pnpm test -- __tests__/components/ComboDisplay.test.tsx`, `pnpm test -- __tests__/components/ScoreDisplay.test.tsx`.
 
 **Files:**
-- Modify: `RealGuitarHero/app/(tabs)/game.tsx`
-- Create: `RealGuitarHero/src/components/ComboDisplay.tsx`
-- Create: `RealGuitarHero/src/components/ScoreDisplay.tsx`
+
+- Modify: `GuitarSlam/app/(tabs)/game.tsx`
+- Create: `GuitarSlam/src/components/ComboDisplay.tsx`
+- Create: `GuitarSlam/src/components/ScoreDisplay.tsx`
 
 **Step 1: Add combo display**
 
-Create `RealGuitarHero/src/components/ComboDisplay.tsx`:
+Create `GuitarSlam/src/components/ComboDisplay.tsx`:
 
 ```tsx
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from "react-native";
 
 export const ComboDisplay = ({ combo }: { combo: number }) => {
   return <Text style={styles.text}>Combo x{combo}</Text>;
@@ -976,18 +1015,18 @@ export const ComboDisplay = ({ combo }: { combo: number }) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#4ecdc4',
+    fontWeight: "700",
+    color: "#4ecdc4",
   },
 });
 ```
 
 **Step 2: Add score display**
 
-Create `RealGuitarHero/src/components/ScoreDisplay.tsx`:
+Create `GuitarSlam/src/components/ScoreDisplay.tsx`:
 
 ```tsx
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from "react-native";
 
 export const ScoreDisplay = ({ score }: { score: number }) => {
   return <Text style={styles.text}>Score {score}</Text>;
@@ -996,20 +1035,20 @@ export const ScoreDisplay = ({ score }: { score: number }) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
   },
 });
 ```
 
 **Step 3: Integrate into Game screen**
 
-Modify `RealGuitarHero/app/(tabs)/game.tsx` to place `ComboDisplay` and `ScoreDisplay` in top corners and animate on hit (use `Animated` or `Reanimated` if already installed).
+Modify `GuitarSlam/app/(tabs)/game.tsx` to place `ComboDisplay` and `ScoreDisplay` in top corners and animate on hit (use `Animated` or `Reanimated` if already installed).
 
 **Step 4: Commit**
 
 ```bash
-git add RealGuitarHero/app/(tabs)/game.tsx RealGuitarHero/src/components/ComboDisplay.tsx RealGuitarHero/src/components/ScoreDisplay.tsx
+git add GuitarSlam/app/(tabs)/game.tsx GuitarSlam/src/components/ComboDisplay.tsx GuitarSlam/src/components/ScoreDisplay.tsx
 
 git commit -m "feat: add combo and score UI"
 ```
@@ -1021,11 +1060,12 @@ git commit -m "feat: add combo and score UI"
 Status (2026-01-30): Checklist doc created; manual device verification not yet performed.
 
 **Files:**
-- Modify: `RealGuitarHero/docs/verification/phase2-audio.md`
+
+- Modify: `GuitarSlam/docs/verification/phase2-audio.md`
 
 **Step 1: Add manual test checklist**
 
-Create `RealGuitarHero/docs/verification/phase2-audio.md`:
+Create `GuitarSlam/docs/verification/phase2-audio.md`:
 
 ```md
 # Phase 2 Audio Verification
@@ -1041,7 +1081,7 @@ Create `RealGuitarHero/docs/verification/phase2-audio.md`:
 **Step 2: Commit**
 
 ```bash
-git add RealGuitarHero/docs/verification/phase2-audio.md
+git add GuitarSlam/docs/verification/phase2-audio.md
 
 git commit -m "docs: add phase2 audio verification checklist"
 ```
